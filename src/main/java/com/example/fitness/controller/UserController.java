@@ -2,6 +2,7 @@ package com.example.fitness.controller;
 import com.example.fitness.config.JwtUtil;
 import com.example.fitness.model.User;
 import com.example.fitness.model.request.LoginRequest;
+import com.example.fitness.model.request.SignupRequest;
 import com.example.fitness.model.response.ErrorResponse;
 import com.example.fitness.model.response.LoginResponse;
 import com.example.fitness.service.UserService;
@@ -45,5 +46,10 @@ public class UserController {
             ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST, e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity signup(@RequestBody SignupRequest request){
+        return null;
     }
 }

@@ -3,6 +3,7 @@ package com.example.fitness.service;
 import com.example.fitness.config.JwtUtil;
 import com.example.fitness.model.User;
 import com.example.fitness.model.request.LoginRequest;
+import com.example.fitness.model.request.SignupRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,5 +26,9 @@ public class UserService {
     public String generateToken(User user) {
         return jwtUtil.createToken(user);
     }
+
+    /*public User signup(SignupRequest request){
+
+    }*/
 
 }
