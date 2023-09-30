@@ -1,5 +1,6 @@
 package com.example.fitness.controller;
 import com.example.fitness.config.JwtUtil;
+import com.example.fitness.exception.InvalidUsernameOrPasswordException;
 import com.example.fitness.model.User;
 import com.example.fitness.model.request.LoginRequest;
 import com.example.fitness.model.request.SignupRequest;
@@ -28,28 +29,12 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody LoginRequest request){
-        try {
-            Authentication authentication = userService.authenticate(request);
-            String username = authentication.getName();
-            User user = new User();
-            user.setUsername(username);
-            String token = userService.generateToken(user);
-            LoginResponse loginRes = new LoginResponse(user, token);
-
-            return ResponseEntity.ok(loginRes);
-
-        }catch (BadCredentialsException e){
-            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST,"Invalid username or password");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
-        }catch (Exception e){
-            ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST, e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
-        }
+    public LoginResponse login(@RequestBody LoginRequest request){
+       return userService.authenticate(request);
     }
 
     @PostMapping("/register")
-    public ResponseEntity signup(@RequestBody SignupRequest request){
-        return null;
+    public User signup(@RequestBody SignupRequest request){
+       return userService.signup(request);
     }
 }

@@ -2,6 +2,7 @@ package com.example.fitness.config;
 
 import com.example.fitness.model.User;
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,6 +25,7 @@ public class JwtUtil {
     }
 
     public String createToken(User user) {
+        byte[] secretKeyBytes = Keys.secretKeyFor(SignatureAlgorithm.HS256).getEncoded();
         Claims claims = Jwts.claims().setSubject(user.getUsername());
         claims.put("username",user.getUsername());
         claims.put("password",user.getPassword());
@@ -32,7 +34,7 @@ public class JwtUtil {
         return Jwts.builder()
                 .setClaims(claims)
                 .setExpiration(tokenValidity)
-                .signWith(SignatureAlgorithm.HS256, secret_key)
+                .signWith(SignatureAlgorithm.HS256, secretKeyBytes)
                 .compact();
     }
 
