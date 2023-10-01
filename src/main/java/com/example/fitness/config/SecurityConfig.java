@@ -39,10 +39,14 @@ public class SecurityConfig {
         public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
             return http
                     .csrf(AbstractHttpConfigurer::disable)
-                    .authorizeHttpRequests(auth -> auth.requestMatchers("/user/**").permitAll().anyRequest().authenticated())
+                    .authorizeHttpRequests(auth -> auth.requestMatchers("/user/**").permitAll().requestMatchers("/home/**").hasAuthority("GUEST").anyRequest().authenticated())
                     .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                     .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                     .httpBasic(Customizer.withDefaults())
+                    .exceptionHandling(exception -> exception.accessDeniedHandler((request, response, accessDeniedException) -> {
+                        System.out.println("Unathorized: " + accessDeniedException.getMessage());
+
+                    }))
                     .build();
         }
 

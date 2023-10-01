@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -17,14 +17,15 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> user = userRepository.findByUsername(username);
-        //List<String> roles = new ArrayList<>();
-        //roles.add("USER");
-        UserDetails userDetails =
-                org.springframework.security.core.userdetails.User.builder()
-                        .username(user.get().getUsername())
-                        .password(user.get().getPassword())
-                        //.roles(roles.toArray(new String[0]))
-                        .build();
-        return userDetails;
+        if (user.isEmpty()) {
+            throw new UsernameNotFoundException("Felhasználó nem található: " + username);
+        }
+
+        return org.springframework.security.core.userdetails.User.builder()
+                .username(user.get().getUsername())
+                .password(user.get().getPassword())
+                .authorities(user.get().getAuthorities())
+                .build();
     }
+
 }

@@ -1,6 +1,5 @@
 package com.example.fitness.model.request;
 
-import com.example.fitness.model.Roles;
 import lombok.*;
 @Data
 @Getter
@@ -10,5 +9,5 @@ import lombok.*;
 public class SignupRequest {
     private String username;
     private String password;
-    private Roles role;
+    private String role;
 }

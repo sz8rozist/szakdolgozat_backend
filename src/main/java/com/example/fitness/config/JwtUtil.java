@@ -2,18 +2,24 @@ package com.example.fitness.config;
 
 import com.example.fitness.model.User;
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 import jakarta.servlet.http.HttpServletRequest;
+
+import javax.crypto.SecretKey;
+import java.security.Key;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Component
 public class JwtUtil {
-    private final String secret_key = "mysecretkey";
+
     private long accessTokenValidity = 60*60*1000;
+
+    private SecretKey secretKey;
 
     private final JwtParser jwtParser;
 
@@ -21,20 +27,19 @@ public class JwtUtil {
     private final String TOKEN_PREFIX = "Bearer ";
 
     public JwtUtil(){
-        this.jwtParser = Jwts.parser().setSigningKey(secret_key);
+        this.secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+        this.jwtParser = Jwts.parser().setSigningKey(this.secretKey);
     }
-
     public String createToken(User user) {
-        byte[] secretKeyBytes = Keys.secretKeyFor(SignatureAlgorithm.HS256).getEncoded();
         Claims claims = Jwts.claims().setSubject(user.getUsername());
         claims.put("username",user.getUsername());
-        claims.put("password",user.getPassword());
+        claims.put("role", user.getRole());
         Date tokenCreateTime = new Date();
         Date tokenValidity = new Date(tokenCreateTime.getTime() + TimeUnit.MINUTES.toMillis(accessTokenValidity));
         return Jwts.builder()
                 .setClaims(claims)
                 .setExpiration(tokenValidity)
-                .signWith(SignatureAlgorithm.HS256, secretKeyBytes)
+                .signWith(SignatureAlgorithm.HS256, this.secretKey)
                 .compact();
     }
 
