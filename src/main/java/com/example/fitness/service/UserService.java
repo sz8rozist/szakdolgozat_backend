@@ -7,17 +7,13 @@ import com.example.fitness.model.Role;
 import com.example.fitness.model.User;
 import com.example.fitness.model.request.LoginRequest;
 import com.example.fitness.model.request.SignupRequest;
-import com.example.fitness.model.response.ErrorResponse;
 import com.example.fitness.model.response.LoginResponse;
 import com.example.fitness.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -41,7 +37,7 @@ public class UserService {
             user.setUsername(userDetails.getUsername());
             user.setRole(Role.valueOf(userDetails.getAuthorities().iterator().next().getAuthority()));
             String token = generateToken(user);
-            return new LoginResponse(userDetails, token);
+            return new LoginResponse(token);
         }catch (BadCredentialsException e){
             throw new InvalidUsernameOrPasswordException("Invalid username or password");
         }

@@ -2,16 +2,13 @@ package com.example.fitness.config;
 
 import com.example.fitness.model.User;
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 import jakarta.servlet.http.HttpServletRequest;
 
 import javax.crypto.SecretKey;
-import java.security.Key;
 import java.util.Date;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -78,14 +75,6 @@ public class JwtUtil {
         } catch (Exception e) {
             throw e;
         }
-    }
-
-    public String getEmail(Claims claims) {
-        return claims.getSubject();
-    }
-
-    private List<String> getRoles(Claims claims) {
-        return (List<String>) claims.get("roles");
     }
 
 }

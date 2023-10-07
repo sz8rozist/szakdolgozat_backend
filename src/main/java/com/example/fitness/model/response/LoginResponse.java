@@ -10,6 +10,5 @@ import org.springframework.security.core.userdetails.UserDetails;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoginResponse {
-    private UserDetails userDetails;
     private String token;
 }
