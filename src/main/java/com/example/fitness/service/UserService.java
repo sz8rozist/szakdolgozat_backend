@@ -4,6 +4,7 @@ import com.example.fitness.config.JwtUtil;
 import com.example.fitness.exception.InvalidUsernameOrPasswordException;
 import com.example.fitness.exception.UsernameIsExsistsException;
 import com.example.fitness.model.Role;
+import com.example.fitness.model.RoleEnumType;
 import com.example.fitness.model.User;
 import com.example.fitness.model.request.LoginRequest;
 import com.example.fitness.model.request.SignupRequest;
@@ -14,9 +15,13 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -35,7 +40,14 @@ public class UserService {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             User user = new User();
             user.setUsername(userDetails.getUsername());
-            user.setRole(Role.valueOf(userDetails.getAuthorities().iterator().next().getAuthority()));
+            List<Role> roles = new ArrayList<>();
+            for (GrantedAuthority authority : user.getAuthorities()) {
+                if (authority instanceof Role) {
+                    roles.add((Role) authority);
+                }
+            }
+            user.setRoles(roles);
+           // user.setRoleEnumType(RoleEnumType.valueOf(userDetails.getAuthorities().iterator().next().getAuthority()));
             String token = generateToken(user);
             return new LoginResponse(token);
         }catch (BadCredentialsException e){
@@ -56,11 +68,16 @@ public class UserService {
         User newUser = new User();
         newUser.setUsername(request.getUsername());
         newUser.setPassword(passwordEncoder.encode(request.getPassword()));
-        if(request.getRole().equals(Role.GUEST.name())){
-            newUser.setRole(Role.valueOf(Role.GUEST.name()));
+        List<Role> roles = new ArrayList<>();
+        Role role = new Role();
+        role.setUser(newUser);
+        if(request.getRole().equals(RoleEnumType.GUEST.name())){
+            role.setRole(RoleEnumType.GUEST);
         }else{
-            newUser.setRole(Role.valueOf(Role.TRAINER.name()));
+            role.setRole(RoleEnumType.TRAINER);
         }
+        roles.add(role);
+        newUser.setRoles(roles);
         userRepository.save(newUser);
         return newUser;
     }

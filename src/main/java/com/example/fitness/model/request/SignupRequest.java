@@ -1,6 +1,5 @@
 package com.example.fitness.model.request;
 
-import com.example.fitness.model.Role;
 import jakarta.validation.constraints.*;
 import lombok.*;
 @Data
@@ -22,6 +21,6 @@ public class SignupRequest {
     @Size(min = 8, message = "A jelszó minimum 8 karakter hosszú kell legyen.")
     private String password;
     @NotEmpty(message = "Jogosultság megadása kötelező.")
-    @Pattern(regexp = "^(GUEST|TRAINER)$", message = "Érvénytelen jogosultság. Csak GUEST vagy TRAINER megengedett.")
+    @Pattern(regexp = "^(GUEST|TRAINER|ADMIN)$", message = "Érvénytelen jogosultság. Csak GUEST vagy TRAINER megengedett.")
     private String role;
 }
