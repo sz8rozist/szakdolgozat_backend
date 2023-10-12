@@ -4,13 +4,15 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "trainer")
 @Setter
 @Getter
-public class Trainer {
+public class Trainer extends User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -22,4 +24,13 @@ public class Trainer {
     @OneToMany(mappedBy = "trainer")
     private List<Notification> notifications;
 
+
+    @OneToMany(mappedBy = "trainer")
+    private List<Guest> guests;
+
+    @ManyToMany(mappedBy = "trainers")
+    private Set<Diet> diets = new HashSet<>();
+
+    @ManyToMany(mappedBy = "trainers")
+    private Set<Workout> workouts = new HashSet<>();
 }

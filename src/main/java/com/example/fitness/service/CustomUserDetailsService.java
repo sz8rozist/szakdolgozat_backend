@@ -13,7 +13,7 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
-   private final UserRepository userRepository;
+   private final UserRepository<User> userRepository;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> user = userRepository.findByUsername(username);

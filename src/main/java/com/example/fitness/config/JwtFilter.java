@@ -1,7 +1,5 @@
 package com.example.fitness.config;
 
-import com.example.fitness.model.User;
-import com.example.fitness.repository.UserRepository;
 import com.example.fitness.service.CustomUserDetailsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;

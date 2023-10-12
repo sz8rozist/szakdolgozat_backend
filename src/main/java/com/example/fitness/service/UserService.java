@@ -28,7 +28,7 @@ public class UserService {
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
-    private UserRepository userRepository;
+    private UserRepository<User> userRepository;
     @Autowired
     private JwtUtil jwtUtil;
     @Autowired
@@ -60,7 +60,7 @@ public class UserService {
     }
 
     public User signup(SignupRequest request){
-        User user = userRepository.findByUsername(request.getUsername()).orElse(null);
+        User user = (User) userRepository.findByUsername(request.getUsername()).orElse(null);
         if(user != null){
             //Létező felhasználónév
             throw new UsernameIsExsistsException("Ezzel a felhasználónévvel már létezik felhasználó!");
