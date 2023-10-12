@@ -56,7 +56,11 @@ public class UserService {
         User newUser = new User();
         newUser.setUsername(request.getUsername());
         newUser.setPassword(passwordEncoder.encode(request.getPassword()));
-        newUser.setRole(Role.valueOf(Role.GUEST.name()));
+        if(request.getRole().equals(Role.GUEST.name())){
+            newUser.setRole(Role.valueOf(Role.GUEST.name()));
+        }else{
+            newUser.setRole(Role.valueOf(Role.TRAINER.name()));
+        }
         userRepository.save(newUser);
         return newUser;
     }

@@ -4,8 +4,10 @@ import com.example.fitness.model.request.LoginRequest;
 import com.example.fitness.model.request.SignupRequest;
 import com.example.fitness.model.response.LoginResponse;
 import com.example.fitness.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -26,7 +28,10 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public User signup(@RequestBody SignupRequest request){
+    @ResponseStatus(HttpStatus.CREATED)
+    public User signup(@Valid @RequestBody SignupRequest request){
        return userService.signup(request);
     }
+
+
 }
