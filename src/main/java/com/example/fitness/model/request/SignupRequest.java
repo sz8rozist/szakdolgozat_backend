@@ -9,9 +9,9 @@ import lombok.*;
 @AllArgsConstructor
 public class SignupRequest {
     @NotEmpty(message = "Vezetékné megadása kötelező.")
-    private String veznev;
+    private String firstName;
     @NotEmpty(message = "Keresztnév megadása kötelező.")
-    private String kernev;
+    private String lastName;
     @NotEmpty(message = "Email cím megadása kötelező.")
     @Email(message = "Hibás email formátum.")
     private String email;
@@ -20,6 +20,8 @@ public class SignupRequest {
     @NotEmpty(message = "Jelszó megadása kötelező.")
     @Size(min = 8, message = "A jelszó minimum 8 karakter hosszú kell legyen.")
     private String password;
+    @NotEmpty(message = "A típus megadása kötelező.")
+    private String type;
     @NotEmpty(message = "Jogosultság megadása kötelező.")
     @Pattern(regexp = "^(GUEST|TRAINER|ADMIN)$", message = "Érvénytelen jogosultság. Csak GUEST vagy TRAINER megengedett.")
     private String role;

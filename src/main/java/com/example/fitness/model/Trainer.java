@@ -1,5 +1,6 @@
 package com.example.fitness.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,9 +13,10 @@ import java.util.Set;
 @Table(name = "trainer")
 @Setter
 @Getter
-public class Trainer extends User {
+public class Trainer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Integer id;
     private String email;
     private String first_name;
@@ -33,4 +35,8 @@ public class Trainer extends User {
 
     @ManyToMany(mappedBy = "trainers")
     private Set<Workout> workouts = new HashSet<>();
+
+    @JoinColumn(name = "user_id")
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private User user;
 }

@@ -27,9 +27,9 @@ public class JwtUtil {
         this.secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS512);
         this.jwtParser = Jwts.parser().setSigningKey(this.secretKey);
     }
-    public String createToken(User user) {
-        Claims claims = Jwts.claims().setSubject(user.getUsername());
-        claims.put("username",user.getUsername());
+    public String createToken(String username) {
+        Claims claims = Jwts.claims().setSubject(username);
+        claims.put("username",username);
         //claims.put("role", user.getRoleEnumType());
         Date tokenCreateTime = new Date();
         Date tokenValidity = new Date(tokenCreateTime.getTime() + TimeUnit.MINUTES.toMillis(accessTokenValidity));

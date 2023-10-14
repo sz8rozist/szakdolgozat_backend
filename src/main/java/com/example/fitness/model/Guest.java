@@ -1,8 +1,10 @@
 package com.example.fitness.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.relational.core.sql.In;
 
 import java.util.HashSet;
 import java.util.List;
@@ -12,20 +14,23 @@ import java.util.Set;
 @Table(name = "guest")
 @Getter
 @Setter
-public class Guest extends User{
+public class Guest{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String email;
-    private int height;
+    @Column(name = "height", columnDefinition = "int default null")
+    private Integer height = null;
 
     private String first_name;
     private String last_name;
-    private int age;
+    @Column(name = "age", columnDefinition = "int default null")
+    private Integer age;
     @OneToMany(mappedBy = "guest")
     private List<Notification> notifications;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "user_id")
     private User user;
 
