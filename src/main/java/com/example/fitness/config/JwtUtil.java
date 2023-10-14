@@ -1,6 +1,7 @@
 package com.example.fitness.config;
 
 import com.example.fitness.model.User;
+import com.example.fitness.repository.UserRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.AuthenticationException;
@@ -9,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -23,14 +25,19 @@ public class JwtUtil {
     private final String TOKEN_HEADER = "Authorization";
     private final String TOKEN_PREFIX = "Bearer ";
 
-    public JwtUtil(){
+    private final UserRepository userRepository;
+
+    public JwtUtil(UserRepository userRepository){
+        this.userRepository = userRepository;
         this.secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS512);
         this.jwtParser = Jwts.parser().setSigningKey(this.secretKey);
     }
     public String createToken(String username) {
         Claims claims = Jwts.claims().setSubject(username);
         claims.put("username",username);
-        //claims.put("role", user.getRoleEnumType());
+        Optional<User> user = userRepository.findByUsername(username);
+        claims.put("role", user.get().getRoles());
+        claims.setSubject(String.valueOf(user.get().getId()));
         Date tokenCreateTime = new Date();
         Date tokenValidity = new Date(tokenCreateTime.getTime() + TimeUnit.MINUTES.toMillis(accessTokenValidity));
         return Jwts.builder()

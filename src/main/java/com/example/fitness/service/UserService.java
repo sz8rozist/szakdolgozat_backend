@@ -51,11 +51,6 @@ public class UserService {
             throw new InvalidUsernameOrPasswordException("Hibás felhasználónév vagy jelszó!");
         }
     }
-
-    public String generateToken(String username) {
-        return jwtUtil.createToken(username);
-    }
-
     public User signup(SignupRequest request){
         if(userRepository.findByUsername(request.getUsername()).isPresent()){
             //Létező felhasználónév
