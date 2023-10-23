@@ -1,9 +1,7 @@
 package com.example.fitness.exception.handler;
 
+import com.example.fitness.exception.*;
 import com.example.fitness.exception.Error;
-import com.example.fitness.exception.InvalidUsernameOrPasswordException;
-import com.example.fitness.exception.UserExsistException;
-import com.example.fitness.exception.UsernameIsExsistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -32,6 +30,10 @@ public class HandlerException {
 
     @ExceptionHandler({UserExsistException.class})
     public ResponseEntity<Object> handleUserExsist(UserExsistException exception){
+        return buildResponseEntity(new Error(HttpStatus.NOT_FOUND, exception.getMessage()));
+    }
+    @ExceptionHandler({FileIsEmptyException.class})
+    public ResponseEntity<Object> handleFileIsEmpty(FileIsEmptyException exception){
         return buildResponseEntity(new Error(HttpStatus.NOT_FOUND, exception.getMessage()));
     }
 

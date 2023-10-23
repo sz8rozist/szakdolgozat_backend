@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/user")
@@ -32,5 +33,9 @@ public class UserController {
         return userService.getUserByID(userId);
     }
 
+    @PostMapping("/image/{userId}")
+    public String uploadProfilePicture(@RequestPart("file")MultipartFile multipartFile, @PathVariable Integer userId){
+        return userService.uploadProfilePicture(multipartFile, userId);
+    }
 
 }

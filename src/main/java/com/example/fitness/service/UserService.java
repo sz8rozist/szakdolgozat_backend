@@ -1,6 +1,7 @@
 package com.example.fitness.service;
 
 import com.example.fitness.config.JwtUtil;
+import com.example.fitness.exception.FileIsEmptyException;
 import com.example.fitness.exception.InvalidUsernameOrPasswordException;
 import com.example.fitness.exception.UserExsistException;
 import com.example.fitness.exception.UsernameIsExsistsException;
@@ -22,10 +23,18 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -94,5 +103,26 @@ public class UserService {
             throw new UserExsistException("A felhasználó nem található!");
         }
         return user;
+    }
+
+    public String uploadProfilePicture(MultipartFile multipartFile, int userId) throws FileIsEmptyException {
+        if(multipartFile.isEmpty()){
+            throw new FileIsEmptyException("A feltöltendő fájl üres.");
+        }
+        User user = userRepository.findById(userId).orElse(null);
+        if(user == null){
+            throw new UserExsistException("A felhasználó nem található.");
+        }
+        try{
+            String fileName = UUID.randomUUID().toString() + "_" + multipartFile.getOriginalFilename();
+            byte[] bytes = multipartFile.getBytes();
+            Path path = Paths.get("src/profilePictures/" + File.separator + fileName);
+            Files.write(path, bytes);
+            user.setProfilePictureName(fileName);
+            userRepository.save(user);
+            return fileName;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
