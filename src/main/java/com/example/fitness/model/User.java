@@ -17,6 +17,7 @@ public class User{
 
     private String username;
     private String password;
+    private String profilePictureName = null;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Role> roles;
 

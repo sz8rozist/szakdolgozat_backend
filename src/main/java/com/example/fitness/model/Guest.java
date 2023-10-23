@@ -23,6 +23,9 @@ public class Guest{
     @Column(name = "height", columnDefinition = "int default null")
     private Integer height = null;
 
+    @Column(name = "weight", columnDefinition = "float default null")
+    private float weight;
+
     private String first_name;
     private String last_name;
     @Column(name = "age", columnDefinition = "int default null")
