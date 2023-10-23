@@ -112,7 +112,13 @@ public class UserService {
             throw new UserExsistException("A felhasználó nem található.");
         }
         try{
-            String fileName = UUID.randomUUID().toString() + "_" + multipartFile.getOriginalFilename();
+            if(user.getProfilePictureName() != null){
+                Path previousProfilePicturePath = Paths.get("src/profilePictures/" + File.separator + user.getProfilePictureName());
+                if(Files.exists(previousProfilePicturePath)){
+                    Files.delete(previousProfilePicturePath);
+                }
+            }
+            String fileName = UUID.randomUUID() + "_" + multipartFile.getOriginalFilename();
             byte[] bytes = multipartFile.getBytes();
             Path path = Paths.get("src/profilePictures/" + File.separator + fileName);
             Files.write(path, bytes);
