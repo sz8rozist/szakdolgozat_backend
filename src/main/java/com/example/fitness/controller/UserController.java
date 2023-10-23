@@ -6,9 +6,13 @@ import com.example.fitness.model.response.LoginResponse;
 import com.example.fitness.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.FileNotFoundException;
 
 @RestController
 @RequestMapping("/user")
@@ -36,6 +40,11 @@ public class UserController {
     @PostMapping("/image/{userId}")
     public String uploadProfilePicture(@RequestPart("file")MultipartFile multipartFile, @PathVariable Integer userId){
         return userService.uploadProfilePicture(multipartFile, userId);
+    }
+
+    @GetMapping("/image/{imageName}")
+    public ResponseEntity<Resource> getImageByName(@PathVariable String imageName) throws FileNotFoundException {
+        return userService.getImageByName(imageName);
     }
 
 }

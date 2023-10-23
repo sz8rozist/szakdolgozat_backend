@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,8 +33,14 @@ public class HandlerException {
     public ResponseEntity<Object> handleUserExsist(UserExsistException exception){
         return buildResponseEntity(new Error(HttpStatus.NOT_FOUND, exception.getMessage()));
     }
+
     @ExceptionHandler({FileIsEmptyException.class})
     public ResponseEntity<Object> handleFileIsEmpty(FileIsEmptyException exception){
+        return buildResponseEntity(new Error(HttpStatus.NOT_FOUND, exception.getMessage()));
+    }
+
+    @ExceptionHandler({FileNotFoundException.class})
+    public ResponseEntity<Object> handleFileNotFound(FileNotFoundException exception){
         return buildResponseEntity(new Error(HttpStatus.NOT_FOUND, exception.getMessage()));
     }
 
