@@ -19,4 +19,10 @@ public class User{
     private String password;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Role> roles;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Guest guest;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Trainer trainer;
 }

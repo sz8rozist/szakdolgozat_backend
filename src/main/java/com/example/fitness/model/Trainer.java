@@ -35,8 +35,8 @@ public class Trainer {
 
     @ManyToMany(mappedBy = "trainers")
     private Set<Workout> workouts = new HashSet<>();
-
-    @JoinColumn(name = "user_id")
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    @JoinColumn(name = "user_id")
     private User user;
 }

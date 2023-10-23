@@ -2,6 +2,7 @@ package com.example.fitness.service;
 
 import com.example.fitness.config.JwtUtil;
 import com.example.fitness.exception.InvalidUsernameOrPasswordException;
+import com.example.fitness.exception.UserExsistException;
 import com.example.fitness.exception.UsernameIsExsistsException;
 import com.example.fitness.model.*;
 import com.example.fitness.model.request.LoginRequest;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -86,4 +88,11 @@ public class UserService {
         return newUser;
     }
 
+    public User getUserByID(Integer userId) {
+        User user = userRepository.findById(userId).orElse(null);
+        if(user == null){
+            throw new UserExsistException("A felhasználó nem található!");
+        }
+        return user;
+    }
 }

@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SignupRequest {
-    @NotEmpty(message = "Vezetékné megadása kötelező.")
+    @NotEmpty(message = "Vezetéknév megadása kötelező.")
     private String firstName;
     @NotEmpty(message = "Keresztnév megadása kötelező.")
     private String lastName;

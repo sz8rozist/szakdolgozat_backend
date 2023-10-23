@@ -2,6 +2,7 @@ package com.example.fitness.exception.handler;
 
 import com.example.fitness.exception.Error;
 import com.example.fitness.exception.InvalidUsernameOrPasswordException;
+import com.example.fitness.exception.UserExsistException;
 import com.example.fitness.exception.UsernameIsExsistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,11 @@ public class HandlerException {
     @ExceptionHandler({UsernameIsExsistsException.class})
     public ResponseEntity<Object> handleUsernameIsExsist(UsernameIsExsistsException exception){
         return buildResponseEntity(new Error(HttpStatus.BAD_REQUEST, exception.getMessage()));
+    }
+
+    @ExceptionHandler({UserExsistException.class})
+    public ResponseEntity<Object> handleUserExsist(UserExsistException exception){
+        return buildResponseEntity(new Error(HttpStatus.NOT_FOUND, exception.getMessage()));
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
