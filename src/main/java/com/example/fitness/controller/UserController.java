@@ -47,4 +47,10 @@ public class UserController {
         return userService.getImageByName(imageName);
     }
 
+    @DeleteMapping("/image/{userId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteProfileImage(@PathVariable Integer userId) throws FileNotFoundException {
+        userService.deleteProfileImage(userId);
+    }
+
 }

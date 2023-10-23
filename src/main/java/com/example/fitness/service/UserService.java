@@ -128,12 +128,28 @@ public class UserService {
         String path = "src/profilePictures/" + imageName;
         File file = new File(path);
         if(!file.exists()){
-            throw new FileNotFoundException("A fájl nem létezik.");
+            throw new FileNotFoundException("A fájl nem található.");
         }
         Resource image = new FileSystemResource(file);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename\"" + imageName + "\"")
                 .body(image);
 
+    }
+
+    public void deleteProfileImage(Integer userId) throws FileNotFoundException {
+        User user = userRepository.findById(userId).orElse(null);
+        if(user == null){
+            throw new UserExsistException("A felhasználó nem található.");
+        }
+        String path = "src/profilePictures/" + user.getProfilePictureName();
+        File file = new File(path);
+        if(!file.exists()){
+            throw new FileNotFoundException("A fájl nem található.");
+        }
+        if(file.delete()){
+            user.setProfilePictureName(null);
+            userRepository.save(user);
+        }
     }
 }
