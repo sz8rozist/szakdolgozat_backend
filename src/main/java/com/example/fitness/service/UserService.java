@@ -191,4 +191,13 @@ public class UserService {
         }
         return passwordEncoder.matches(checkPasswordRequest.getPassword(), user.getPassword());
     }
+
+    public void changePassword(CheckPasswordRequest checkPasswordRequest, int userId) {
+        User user = userRepository.findById(userId).orElse(null);
+        if(user == null){
+            throw new UserExsistException("A felhasználó nem található.");
+        }
+        user.setPassword(passwordEncoder.encode(checkPasswordRequest.getPassword()));
+        userRepository.save(user);
+    }
 }

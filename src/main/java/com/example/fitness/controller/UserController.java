@@ -66,4 +66,9 @@ public class UserController {
         return userService.checkPassword(userId, checkPasswordRequest);
     }
 
+    @PutMapping("/password/{userId}")
+    public void changePassword(@RequestBody CheckPasswordRequest checkPasswordRequest, @PathVariable int userId){
+        userService.changePassword(checkPasswordRequest, userId);
+    }
+
 }
