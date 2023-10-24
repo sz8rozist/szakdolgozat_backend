@@ -20,8 +20,8 @@ public class Guest{
     private Integer id;
 
     private String email;
-    @Column(name = "height", columnDefinition = "int default null")
-    private Integer height = null;
+    @Column(name = "height", columnDefinition = "float default null")
+    private float height;
 
     @Column(name = "weight", columnDefinition = "float default null")
     private float weight;

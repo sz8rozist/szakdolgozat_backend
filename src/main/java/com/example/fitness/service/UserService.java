@@ -8,6 +8,7 @@ import com.example.fitness.exception.UsernameIsExsistsException;
 import com.example.fitness.model.*;
 import com.example.fitness.model.request.LoginRequest;
 import com.example.fitness.model.request.SignupRequest;
+import com.example.fitness.model.request.UpdateProfile;
 import com.example.fitness.model.response.LoginResponse;
 import com.example.fitness.repository.GuestRepository;
 import com.example.fitness.repository.TrainerRepository;
@@ -100,6 +101,7 @@ public class UserService {
         if(user == null){
             throw new UserExsistException("A felhasználó nem található!");
         }
+
         return user;
     }
 
@@ -157,5 +159,27 @@ public class UserService {
             user.setProfilePictureName(null);
             userRepository.save(user);
         }
+    }
+
+    public void update(UpdateProfile updateProfile, int userId) {
+        User user = userRepository.findById(userId).orElse(null);
+        if(user == null){
+            throw new UserExsistException("A felhasználó nem található.");
+        }
+        user.getGuest().ifPresent(guest -> {
+            guest.setLast_name(updateProfile.getLastName());
+            guest.setFirst_name(updateProfile.getFirstName());
+            guest.setEmail(updateProfile.getEmail());
+            guest.setAge(updateProfile.getAge());
+            guest.setWeight(updateProfile.getWeight());
+            guest.setHeight(updateProfile.getHeight());
+        });
+        user.getTrainer().ifPresent(trainer ->{
+            trainer.setLast_name(updateProfile.getLastName());
+            trainer.setFirst_name(updateProfile.getFirstName());
+            trainer.setEmail(updateProfile.getEmail());
+            trainer.setType(updateProfile.getType());
+        });
+        userRepository.save(user);
     }
 }

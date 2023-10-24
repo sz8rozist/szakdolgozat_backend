@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 @Table(name = "user")
@@ -26,4 +27,12 @@ public class User{
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Trainer trainer;
+
+    public Optional<Guest> getGuest() {
+        return Optional.ofNullable(guest);
+    }
+
+    public Optional<Trainer> getTrainer() {
+        return Optional.ofNullable(trainer);
+    }
 }
