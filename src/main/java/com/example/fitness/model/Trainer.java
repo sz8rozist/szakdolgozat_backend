@@ -28,6 +28,7 @@ public class Trainer {
 
 
     @OneToMany(mappedBy = "trainer")
+    @JsonIgnore
     private List<Guest> guests;
 
     @ManyToMany(mappedBy = "trainers")
