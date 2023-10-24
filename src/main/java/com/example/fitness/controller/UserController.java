@@ -1,5 +1,6 @@
 package com.example.fitness.controller;
 import com.example.fitness.model.User;
+import com.example.fitness.model.request.CheckPasswordRequest;
 import com.example.fitness.model.request.LoginRequest;
 import com.example.fitness.model.request.SignupRequest;
 import com.example.fitness.model.request.UpdateProfile;
@@ -58,6 +59,11 @@ public class UserController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateProfileData(@Valid @RequestBody UpdateProfile updateProfile, @PathVariable int userId){
         userService.update(updateProfile, userId);
+    }
+
+    @PostMapping("/password/{userId}")
+    public boolean checkPassword(@PathVariable int userId, @RequestBody CheckPasswordRequest checkPasswordRequest){
+        return userService.checkPassword(userId, checkPasswordRequest);
     }
 
 }

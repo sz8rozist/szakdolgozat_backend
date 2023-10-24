@@ -6,6 +6,7 @@ import com.example.fitness.exception.InvalidUsernameOrPasswordException;
 import com.example.fitness.exception.UserExsistException;
 import com.example.fitness.exception.UsernameIsExsistsException;
 import com.example.fitness.model.*;
+import com.example.fitness.model.request.CheckPasswordRequest;
 import com.example.fitness.model.request.LoginRequest;
 import com.example.fitness.model.request.SignupRequest;
 import com.example.fitness.model.request.UpdateProfile;
@@ -181,5 +182,13 @@ public class UserService {
             trainer.setType(updateProfile.getType());
         });
         userRepository.save(user);
+    }
+
+    public boolean checkPassword(int userId, CheckPasswordRequest checkPasswordRequest) {
+        User user = userRepository.findById(userId).orElse(null);
+        if(user == null){
+            throw new UserExsistException("A felhasználó nem található.");
+        }
+        return passwordEncoder.matches(checkPasswordRequest.getPassword(), user.getPassword());
     }
 }
