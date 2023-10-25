@@ -20,6 +20,9 @@ public class Diet {
     @Enumerated(EnumType.STRING)
     private FoodType type;
 
+    @Temporal(TemporalType.DATE)
+    private String date;
+
     @ManyToOne
     private Food food;
 
