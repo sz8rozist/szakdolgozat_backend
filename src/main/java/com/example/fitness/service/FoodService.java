@@ -21,4 +21,8 @@ public class FoodService {
     public Food saveFood(Food food) {
         return foodRepository.save(food);
     }
+
+    public List<Food> getAllFoodWithoutPagination() {
+        return foodRepository.findAll();
+    }
 }

@@ -24,4 +24,9 @@ public class FoodController {
     public Food saveFood(@Valid @RequestBody Food food){
         return foodService.saveFood(food);
     }
+
+    @GetMapping
+    public List<Food> getAllFoodsWithoutPagination(){
+        return foodService.getAllFoodWithoutPagination();
+    }
 }
