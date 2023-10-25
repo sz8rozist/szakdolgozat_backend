@@ -44,6 +44,11 @@ public class HandlerException {
         return buildResponseEntity(new Error(HttpStatus.NOT_FOUND, exception.getMessage()));
     }
 
+    @ExceptionHandler({TrainerNotFoundException.class})
+    public ResponseEntity<Object> handleTrainerNotFound(TrainerNotFoundException exception){
+        return buildResponseEntity(new Error(HttpStatus.NOT_FOUND, exception.getMessage()));
+    }
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
