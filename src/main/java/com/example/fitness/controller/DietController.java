@@ -5,6 +5,7 @@ import com.example.fitness.model.request.DietRequest;
 import com.example.fitness.service.DietService;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -16,10 +17,12 @@ public class DietController {
     public DietController(DietService dietService) {
         this.dietService = dietService;
     }
-
-
     @PostMapping
     public void saveDiet(@RequestBody List<DietRequest> dietFoodList){
         dietService.saveDiet(dietFoodList);
+    }
+    @GetMapping("/dates/{userId}")
+    public List<LocalDate> getDates(@PathVariable Integer userId){
+        return dietService.findDistinctDatesByGuestId(userId);
     }
 }

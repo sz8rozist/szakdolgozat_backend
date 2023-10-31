@@ -28,5 +28,7 @@ public class Diet {
     @ManyToOne
     private Food food;
 
+    @OneToMany(mappedBy = "diet")
+    private Set<DietGuest> dietGuests;
 
 }

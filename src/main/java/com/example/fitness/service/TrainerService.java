@@ -1,5 +1,6 @@
 package com.example.fitness.service;
 
+import com.example.fitness.exception.GuestNotFoundException;
 import com.example.fitness.exception.TrainerNotFoundException;
 import com.example.fitness.exception.UserExsistException;
 import com.example.fitness.model.Guest;
@@ -44,10 +45,13 @@ public class TrainerService {
         if(user == null){
             throw new UserExsistException("Nem található felhasználó!");
         }
-        Guest guest = guestRepository.findByUserId(user.getId());
+        Guest guest = guestRepository.findByUserId(user.getId()).orElse(null);
         Trainer trainer = trainerRepository.findById(chooseTrainerRequest.getTrainerId()).orElse(null);
         if(trainer == null){
             throw new TrainerNotFoundException("Nem található edző!");
+        }
+        if(guest == null){
+            throw new GuestNotFoundException("Nem található vendég");
         }
         guest.setTrainer(trainer);
         guestRepository.save(guest);

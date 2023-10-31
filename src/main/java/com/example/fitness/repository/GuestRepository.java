@@ -4,7 +4,9 @@ import com.example.fitness.model.Guest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface GuestRepository extends JpaRepository<Guest, Integer> {
-    Guest findByUserId(Integer user_id);
+    Optional<Guest> findByUserId(Integer user_id);
 }
