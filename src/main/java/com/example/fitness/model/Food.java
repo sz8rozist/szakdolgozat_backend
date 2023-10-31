@@ -1,5 +1,6 @@
 package com.example.fitness.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -29,5 +30,6 @@ public class Food {
     private float fat;
 
     @OneToMany(mappedBy = "food")
+    @JsonIgnore
     private List<Diet> diets;
 }

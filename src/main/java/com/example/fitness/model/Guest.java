@@ -40,9 +40,9 @@ public class Guest{
     @ManyToOne
     private Trainer trainer;
 
-    @ManyToMany(mappedBy = "guests")
-    private Set<Diet> diets = new HashSet<>();
+    @OneToMany(mappedBy = "guest")
+    Set<DietGuest> dietGuests;
 
-    @ManyToMany(mappedBy = "guests")
-    private Set<Workout> workouts = new HashSet<>();
+    @OneToMany(mappedBy = "guest")
+    Set<WorkoutGuest> workoutGuests;
 }

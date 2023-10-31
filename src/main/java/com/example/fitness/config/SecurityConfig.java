@@ -37,7 +37,8 @@ public class SecurityConfig {
         public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
             return http
                     .csrf(AbstractHttpConfigurer::disable)
-                    .authorizeHttpRequests(auth -> auth.requestMatchers("/user/**", "/trainer/**", "/food/**").permitAll().requestMatchers("/home/**").hasAuthority("GUEST").anyRequest().authenticated())
+                    //Trainer, food, diet routingokat nem szabad mindenhol átengedni.
+                    .authorizeHttpRequests(auth -> auth.requestMatchers("/user/**", "/trainer/**", "/food/**", "/diet/**").permitAll().requestMatchers("/home/**").hasAuthority("GUEST").anyRequest().authenticated())
                     .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                     .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                     .httpBasic(Customizer.withDefaults())

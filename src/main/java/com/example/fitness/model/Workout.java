@@ -25,14 +25,6 @@ public class Workout {
     @ManyToOne
     private Exercise exercise;
 
-    @ManyToMany
-    @JoinTable(name = "workout_guest",
-            joinColumns = @JoinColumn(name = "workout_id"),
-            inverseJoinColumns = @JoinColumn(name = "guest_id", nullable = true))
-    private Set<Guest> guests = new HashSet<>();
-    @ManyToMany
-    @JoinTable(name = "workout_guest",
-            joinColumns = @JoinColumn(name = "workout_id"),
-            inverseJoinColumns = @JoinColumn(name = "trainer_id"))
-    private Set<Trainer> trainers = new HashSet<>();
+    @OneToMany(mappedBy = "workout")
+    Set<WorkoutGuest> workoutGuests;
 }

@@ -3,7 +3,9 @@ package com.example.fitness.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -21,19 +23,10 @@ public class Diet {
     private FoodType type;
 
     @Temporal(TemporalType.DATE)
-    private String date;
+    private LocalDate date;
 
     @ManyToOne
     private Food food;
 
-    @ManyToMany
-    @JoinTable(name = "diet_guest",
-            joinColumns = @JoinColumn(name = "diet_id"),
-            inverseJoinColumns = @JoinColumn(name = "guest_id"))
-    private Set<Guest> guests = new HashSet<>();
-    @ManyToMany
-    @JoinTable(name = "diet_guest",
-            joinColumns = @JoinColumn(name = "diet_id"),
-            inverseJoinColumns = @JoinColumn(name = "trainer_id"))
-    private Set<Trainer> trainers = new HashSet<>();
+
 }

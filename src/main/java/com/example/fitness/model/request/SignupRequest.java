@@ -20,8 +20,6 @@ public class SignupRequest {
     @NotEmpty(message = "Jelszó megadása kötelező.")
     @Size(min = 8, message = "A jelszó minimum 8 karakter hosszú kell legyen.")
     private String password;
-    @NotEmpty(message = "A típus megadása kötelező.")
-    private String type;
     @NotEmpty(message = "Jogosultság megadása kötelező.")
     @Pattern(regexp = "^(GUEST|TRAINER|ADMIN)$", message = "Érvénytelen jogosultság. Csak GUEST vagy TRAINER megengedett.")
     private String role;

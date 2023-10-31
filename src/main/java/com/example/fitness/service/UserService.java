@@ -87,7 +87,6 @@ public class UserService {
             trainer.setEmail(request.getEmail());
             trainer.setLast_name(request.getLastName());
             trainer.setFirst_name(request.getFirstName());
-            trainer.setType(request.getType());
             trainerRepository.save(trainer);
             role.setRole(RoleEnumType.TRAINER);
         }

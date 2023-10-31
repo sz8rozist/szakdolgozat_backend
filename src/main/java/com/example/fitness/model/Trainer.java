@@ -31,11 +31,12 @@ public class Trainer {
     @JsonIgnore
     private List<Guest> guests;
 
-    @ManyToMany(mappedBy = "trainers")
-    private Set<Diet> diets = new HashSet<>();
+    @OneToMany(mappedBy = "trainer")
+    Set<DietGuest> dietGuests;
 
-    @ManyToMany(mappedBy = "trainers")
-    private Set<Workout> workouts = new HashSet<>();
+    @OneToMany(mappedBy = "trainer")
+    Set<WorkoutGuest> workoutGuests;
+
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     @JoinColumn(name = "user_id")
