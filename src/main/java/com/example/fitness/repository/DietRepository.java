@@ -14,6 +14,4 @@ import java.util.Optional;
 public interface DietRepository extends JpaRepository<Diet, Integer> {
     @Query("SELECT d FROM Diet d JOIN d.dietGuests dg WHERE dg.guest.id = :guestId AND d.date = :dietDate")
     List<Diet> findDietsByGuestIdAndDietDate(@Param("guestId") Integer guestId, @Param("dietDate") LocalDate dietDate);
-
-    Optional<Diet> findByFoodId(Integer foodId);
 }

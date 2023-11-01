@@ -34,9 +34,9 @@ public class DietController {
         dietService.deleteDiet(guestId, dietDate);
     }
 
-    @DeleteMapping("/food/{foodId}/{guestId}")
+    @DeleteMapping("/food/{dietId}/{guestId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Integer foodId,@PathVariable Integer guestId){
-        dietService.deleteFood(foodId, guestId);
+    public void delete(@PathVariable Integer dietId,@PathVariable Integer guestId){
+        dietService.deleteFood(dietId, guestId);
     }
  }

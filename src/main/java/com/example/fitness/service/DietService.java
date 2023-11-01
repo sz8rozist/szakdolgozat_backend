@@ -81,8 +81,8 @@ public class DietService {
         dietRepository.deleteAll(diets);
     }
 
-    public void deleteFood(Integer foodId, Integer guestId) {
-        Optional<Diet> diet = dietRepository.findByFoodId(foodId);
+    public void deleteFood(Integer dietId, Integer guestId) {
+        Optional<Diet> diet = dietRepository.findById(dietId);
         Optional<DietGuest> dietGuest = dietGuestRepository.findDietGuestByDietIdAndGuestId(diet.get().getId(), guestId);
         dietGuest.ifPresent(dietGuestRepository::delete);
         diet.ifPresent(dietRepository::delete);
