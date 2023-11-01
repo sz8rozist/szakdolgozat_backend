@@ -1,6 +1,7 @@
 package com.example.fitness.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,7 +34,7 @@ public class Guest{
     @OneToMany(mappedBy = "guest")
     private List<Notification> notifications;
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonIgnore
+    @JsonManagedReference(value = "guest")
     @JoinColumn(name = "user_id")
     private User user;
 

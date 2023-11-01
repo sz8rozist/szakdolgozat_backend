@@ -1,6 +1,7 @@
 package com.example.fitness.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -38,7 +39,7 @@ public class Trainer {
     Set<WorkoutGuest> workoutGuests;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonIgnore
+    @JsonManagedReference(value = "trainer")
     @JoinColumn(name = "user_id")
     private User user;
 }

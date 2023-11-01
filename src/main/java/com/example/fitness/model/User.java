@@ -1,5 +1,7 @@
 package com.example.fitness.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,9 +25,11 @@ public class User{
     private List<Role> roles;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonBackReference(value = "guest_id")
     private Guest guest;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonBackReference(value = "trainer_id")
     private Trainer trainer;
 
     public Optional<Guest> getGuest() {
