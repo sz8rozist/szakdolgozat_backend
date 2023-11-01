@@ -5,6 +5,7 @@ import com.example.fitness.model.request.LoginRequest;
 import com.example.fitness.model.request.SignupRequest;
 import com.example.fitness.model.request.UpdateProfile;
 import com.example.fitness.model.response.LoginResponse;
+import com.example.fitness.model.response.UserResponse;
 import com.example.fitness.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public User getUserByID(@PathVariable Integer userId){
+    public UserResponse getUserByID(@PathVariable Integer userId){
         return userService.getUserByID(userId);
     }
 

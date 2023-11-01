@@ -42,6 +42,7 @@ public class Guest{
     private Trainer trainer;
 
     @OneToMany(mappedBy = "guest")
+    @JsonIgnore
     Set<DietGuest> dietGuests;
 
     @OneToMany(mappedBy = "guest")

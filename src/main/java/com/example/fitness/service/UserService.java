@@ -11,6 +11,7 @@ import com.example.fitness.model.request.LoginRequest;
 import com.example.fitness.model.request.SignupRequest;
 import com.example.fitness.model.request.UpdateProfile;
 import com.example.fitness.model.response.LoginResponse;
+import com.example.fitness.model.response.UserResponse;
 import com.example.fitness.repository.GuestRepository;
 import com.example.fitness.repository.TrainerRepository;
 import com.example.fitness.repository.UserRepository;
@@ -96,13 +97,18 @@ public class UserService {
         return newUser;
     }
 
-    public User getUserByID(Integer userId) {
+    public UserResponse getUserByID(Integer userId) {
         User user = userRepository.findById(userId).orElse(null);
         if(user == null){
             throw new UserExsistException("A felhasználó nem található!");
         }
-
-        return user;
+        UserResponse userResponse = new UserResponse();
+        userResponse.setUser(user);
+        Guest guest = guestRepository.findByUserId(userId).orElse(null);
+        Trainer trainer = trainerRepository.findByUserId(userId).orElse(null);
+        userResponse.setGuest(guest);
+        userResponse.setTrainer(trainer);
+        return userResponse;
     }
 
     public String uploadProfilePicture(MultipartFile multipartFile, int userId) throws FileIsEmptyException {
