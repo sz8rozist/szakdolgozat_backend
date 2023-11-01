@@ -8,9 +8,12 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface DietRepository extends JpaRepository<Diet, Integer> {
-    @Query("SELECT DISTINCT d.date FROM Diet d JOIN d.dietGuests dg WHERE dg.guest.id = :guestId")
-    List<LocalDate> findDistinctDatesByGuestId(@Param("guestId") Integer guestId);
+    @Query("SELECT d FROM Diet d JOIN d.dietGuests dg WHERE dg.guest.id = :guestId AND d.date = :dietDate")
+    List<Diet> findDietsByGuestIdAndDietDate(@Param("guestId") Integer guestId, @Param("dietDate") LocalDate dietDate);
+
+    Optional<Diet> findByFoodId(Integer foodId);
 }

@@ -1,5 +1,6 @@
 package com.example.fitness.service;
 
+import com.example.fitness.model.DietGuest;
 import com.example.fitness.model.Food;
 import com.example.fitness.repository.FoodRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FoodService {
@@ -25,4 +27,5 @@ public class FoodService {
     public List<Food> getAllFoodWithoutPagination() {
         return foodRepository.findAll();
     }
+
 }

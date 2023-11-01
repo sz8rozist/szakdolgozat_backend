@@ -3,12 +3,14 @@ package com.example.fitness.service;
 import com.example.fitness.exception.GuestNotFoundException;
 import com.example.fitness.model.*;
 import com.example.fitness.model.request.DietRequest;
+import com.example.fitness.model.response.DietResponse;
 import com.example.fitness.repository.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DietService {
@@ -49,11 +51,40 @@ public class DietService {
         dietGuestRepository.saveAll(dietGuests);
     }
 
-    public List<LocalDate> findDistinctDatesByGuestId(Integer userId) {
-        Guest guest = guestRepository.findByUserId(userId).orElse(null);
-        if(guest == null){
-            throw new GuestNotFoundException("A vendég nem található.");
+    public DietResponse getDietByDateAndUserId(Integer guestId, LocalDate dietDate) {
+        List<Diet> diets = dietRepository.findDietsByGuestIdAndDietDate(guestId,dietDate);
+        int calorieSum = 0;
+        int proteinSum = 0;
+        int carbonhydrateSum= 0;
+        int fatSum = 0;
+        for(Diet d: diets){
+            calorieSum += d.getFood().getCalorie();
+            proteinSum += (int) d.getFood().getProtein();
+            carbonhydrateSum += (int) d.getFood().getCarbonhydrate();
+            fatSum += (int) d.getFood().getFat();
         }
-        return dietRepository.findDistinctDatesByGuestId(guest.getId());
+        DietResponse dietResponse = new DietResponse();
+        dietResponse.setDiet(diets);
+        dietResponse.setCalorieSum(calorieSum);
+        dietResponse.setProteinSum(proteinSum);
+        dietResponse.setCarbonhydrateSum(carbonhydrateSum);
+        dietResponse.setFatSum(fatSum);
+        return dietResponse;
+    }
+
+    public void deleteDiet(Integer guestId, LocalDate dietDate) {
+        List<Diet> diets = dietRepository.findDietsByGuestIdAndDietDate(guestId, dietDate);
+        for(Diet d: diets){
+            Optional<DietGuest> dietGuest = dietGuestRepository.findDietGuestByDietIdAndGuestId(d.getId(), guestId);
+            dietGuest.ifPresent(dietGuestRepository::delete);
+        }
+        dietRepository.deleteAll(diets);
+    }
+
+    public void deleteFood(Integer foodId, Integer guestId) {
+        Optional<Diet> diet = dietRepository.findByFoodId(foodId);
+        Optional<DietGuest> dietGuest = dietGuestRepository.findDietGuestByDietIdAndGuestId(diet.get().getId(), guestId);
+        dietGuest.ifPresent(dietGuestRepository::delete);
+        diet.ifPresent(dietRepository::delete);
     }
 }
