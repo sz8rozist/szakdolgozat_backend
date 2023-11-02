@@ -1,9 +1,11 @@
 package com.example.fitness.service;
 
 import com.example.fitness.exception.DietNotFouncException;
+import com.example.fitness.exception.FoodNotFoundException;
 import com.example.fitness.exception.GuestNotFoundException;
 import com.example.fitness.model.*;
 import com.example.fitness.model.request.DietRequest;
+import com.example.fitness.model.request.DietUpdateRequest;
 import com.example.fitness.model.response.DietResponse;
 import com.example.fitness.repository.*;
 import org.springframework.stereotype.Service;
@@ -95,5 +97,21 @@ public class DietService {
             throw new DietNotFouncException("Nem található étrend");
         }
         return diet;
+    }
+
+    public void updateDiet(DietUpdateRequest dietUpdateRequest, Integer dietId) {
+        Food food = foodRepository.findById(dietUpdateRequest.getFoodId()).orElse(null);
+        Diet diet = dietRepository.findById(dietId).orElse(null);
+        if(food == null){
+            throw new FoodNotFoundException("Nem található étel");
+        }
+        if(diet == null){
+            throw new DietNotFouncException("Nem található étkezés");
+        }
+        diet.setFood(food);
+        diet.setDate(dietUpdateRequest.getDate());
+        diet.setQuantity(dietUpdateRequest.getQuantity());
+        diet.setType(dietUpdateRequest.getType());
+        dietRepository.save(diet);
     }
 }

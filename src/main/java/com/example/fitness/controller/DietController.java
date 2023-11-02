@@ -2,6 +2,7 @@ package com.example.fitness.controller;
 
 import com.example.fitness.model.Diet;
 import com.example.fitness.model.request.DietRequest;
+import com.example.fitness.model.request.DietUpdateRequest;
 import com.example.fitness.model.response.DietResponse;
 import com.example.fitness.service.DietService;
 import org.springframework.http.HttpStatus;
@@ -43,5 +44,11 @@ public class DietController {
     @GetMapping("/{dietId}")
     public Diet getDietById(@PathVariable Integer dietId){
         return dietService.getDietById(dietId);
+    }
+
+    @PutMapping("/{dietId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void updateDiet(@RequestBody DietUpdateRequest dietUpdateRequest, @PathVariable Integer dietId){
+        dietService.updateDiet(dietUpdateRequest, dietId);
     }
  }
