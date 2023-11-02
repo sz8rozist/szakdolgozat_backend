@@ -62,7 +62,10 @@ public class HandlerException {
     public ResponseEntity<Object> handleFoodNotFoundException(FoodNotFoundException exception){
         return buildResponseEntity(new Error(HttpStatus.NOT_FOUND, exception.getMessage()));
     }
-
+    @ExceptionHandler({ExerciseNotFoundException.class})
+    public ResponseEntity<Object> handleExerciseNotFoundException(ExerciseNotFoundException exception){
+        return buildResponseEntity(new Error(HttpStatus.NOT_FOUND, exception.getMessage()));
+    }
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {

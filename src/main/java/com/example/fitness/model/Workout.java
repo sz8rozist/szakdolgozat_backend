@@ -21,7 +21,6 @@ public class Workout {
     private int repetitions;
     @Temporal(TemporalType.DATE)
     private int date;
-
     @ManyToOne
     private Exercise exercise;
 
