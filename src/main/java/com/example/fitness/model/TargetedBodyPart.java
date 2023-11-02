@@ -7,5 +7,4 @@ public enum TargetedBodyPart {
     ARMS,
     SHOULDER,
     ABS
-
 }

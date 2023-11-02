@@ -22,6 +22,7 @@ public class Workout {
     @Temporal(TemporalType.DATE)
     private int date;
     @ManyToOne
+    @JoinColumn(name="exercise_id")
     private Exercise exercise;
 
     @OneToMany(mappedBy = "workout")

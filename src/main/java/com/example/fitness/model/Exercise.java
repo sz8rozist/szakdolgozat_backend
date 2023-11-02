@@ -1,5 +1,6 @@
 package com.example.fitness.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,5 +20,6 @@ public class Exercise {
     @Enumerated(EnumType.STRING)
     private TargetedBodyPart targetedBodyPart;
     @OneToMany(mappedBy = "exercise")
+    @JsonIgnore
     private List<Workout> workouts;
 }
