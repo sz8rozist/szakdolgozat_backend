@@ -39,4 +39,9 @@ public class DietController {
     public void delete(@PathVariable Integer dietId,@PathVariable Integer guestId){
         dietService.deleteFood(dietId, guestId);
     }
+
+    @GetMapping("/{dietId}")
+    public Diet getDietById(@PathVariable Integer dietId){
+        return dietService.getDietById(dietId);
+    }
  }

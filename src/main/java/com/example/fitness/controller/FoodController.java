@@ -30,4 +30,9 @@ public class FoodController {
     public List<Food> getAllFoodsWithoutPagination(){
         return foodService.getAllFoodWithoutPagination();
     }
+
+    @GetMapping("/{foodId}")
+    public Food getFoodById(@PathVariable Integer foodId){
+        return foodService.getFoodById(foodId);
+    }
 }

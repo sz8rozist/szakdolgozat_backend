@@ -1,5 +1,6 @@
 package com.example.fitness.service;
 
+import com.example.fitness.exception.DietNotFouncException;
 import com.example.fitness.exception.GuestNotFoundException;
 import com.example.fitness.model.*;
 import com.example.fitness.model.request.DietRequest;
@@ -86,5 +87,13 @@ public class DietService {
         Optional<DietGuest> dietGuest = dietGuestRepository.findDietGuestByDietIdAndGuestId(diet.get().getId(), guestId);
         dietGuest.ifPresent(dietGuestRepository::delete);
         diet.ifPresent(dietRepository::delete);
+    }
+
+    public Diet getDietById(Integer dietId) {
+       Diet diet = dietRepository.findById(dietId).orElse(null);
+        if(diet == null){
+            throw new DietNotFouncException("Nem található étrend");
+        }
+        return diet;
     }
 }

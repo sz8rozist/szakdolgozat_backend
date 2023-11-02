@@ -1,5 +1,6 @@
 package com.example.fitness.service;
 
+import com.example.fitness.exception.FoodNotFoundException;
 import com.example.fitness.model.DietGuest;
 import com.example.fitness.model.Food;
 import com.example.fitness.repository.FoodRepository;
@@ -28,4 +29,11 @@ public class FoodService {
         return foodRepository.findAll();
     }
 
+    public Food getFoodById(Integer foodId) {
+        Food food = foodRepository.findById(foodId).orElse(null);
+        if(food == null){
+            throw new FoodNotFoundException("Nem található étel");
+        }
+        return food;
+    }
 }
