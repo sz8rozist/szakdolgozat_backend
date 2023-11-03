@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -20,7 +21,7 @@ public class Workout {
     private int sets;
     private int repetitions;
     @Temporal(TemporalType.DATE)
-    private int date;
+    private LocalDate date;
     @ManyToOne
     @JoinColumn(name="exercise_id")
     private Exercise exercise;

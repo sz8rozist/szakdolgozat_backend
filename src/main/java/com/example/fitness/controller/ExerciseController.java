@@ -2,11 +2,13 @@ package com.example.fitness.controller;
 
 import com.example.fitness.model.Exercise;
 import com.example.fitness.model.Food;
+import com.example.fitness.model.request.WorkoutRequest;
 import com.example.fitness.service.ExerciseService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
