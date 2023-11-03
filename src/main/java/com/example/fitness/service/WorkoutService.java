@@ -1,8 +1,9 @@
 package com.example.fitness.service;
 
-import com.example.fitness.exception.GuestNotFoundException;
+import com.example.fitness.exception.*;
 import com.example.fitness.model.*;
 import com.example.fitness.model.request.WorkoutRequest;
+import com.example.fitness.model.request.WorkoutUpdateRequest;
 import com.example.fitness.repository.ExerciseRepository;
 import com.example.fitness.repository.GuestRepository;
 import com.example.fitness.repository.WorkoutGuestRepository;
@@ -51,5 +52,37 @@ public class WorkoutService {
         }
         workoutRepository.saveAll(workouts);
         workoutGuestRepository.saveAll(workoutGuests);
+    }
+
+    public List<Workout> getWorkoutByDateAndUserId(Integer userId, LocalDate date){
+        Guest guest = guestRepository.findByUserId(userId).orElse(null);
+        if(guest == null){
+            throw new GuestNotFoundException("Nem található vendég ezzel a user azonosítóval: " + userId);
+        }
+        return workoutRepository.findWorkoutsByGuestIdAndWorkoutDate(guest.getId(), date);
+    }
+
+    public Workout getById(Integer id) {
+        Workout workout = workoutRepository.findById(id).orElse(null);
+        if(workout == null){
+            throw new WorkoutNotFoundException("A " + id + " azonosítójú edzés nem található.");
+        }
+        return workout;
+    }
+
+    public void updateWorkout(WorkoutUpdateRequest workoutUpdateRequest, Integer workoutId) {
+        Exercise exercise = exerciseRepository.findById(workoutUpdateRequest.getExerciseId()).orElse(null);
+        Workout workout = workoutRepository.findById(workoutId).orElse(null);
+        if(exercise == null){
+            throw new ExerciseNotFoundException("Nem található gyakorlat");
+        }
+        if(workout == null){
+            throw new WorkoutNotFoundException("Nem található edzés");
+        }
+        workout.setExercise(exercise);
+        workout.setDate(workoutUpdateRequest.getDate());
+        workout.setRepetitions(workoutUpdateRequest.getRepetitions());
+        workout.setSets(workoutUpdateRequest.getSets());
+        workoutRepository.save(workout);
     }
 }

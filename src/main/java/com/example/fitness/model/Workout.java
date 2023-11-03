@@ -1,5 +1,6 @@
 package com.example.fitness.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,5 +28,6 @@ public class Workout {
     private Exercise exercise;
 
     @OneToMany(mappedBy = "workout")
+    @JsonIgnore
     Set<WorkoutGuest> workoutGuests;
 }
