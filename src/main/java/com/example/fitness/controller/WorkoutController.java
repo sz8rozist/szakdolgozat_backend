@@ -40,4 +40,9 @@ public class WorkoutController {
     public void updateDiet(@RequestBody WorkoutUpdateRequest workoutUpdateRequest, @PathVariable Integer workoutId){
         workoutService.updateWorkout(workoutUpdateRequest, workoutId);
     }
+    @DeleteMapping("/{guestId}/{date}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteWorkout(@PathVariable Integer guestId, @PathVariable LocalDate date){
+        workoutService.deleteWorkout(guestId, date);
+    }
 }

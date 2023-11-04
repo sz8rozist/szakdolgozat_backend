@@ -6,6 +6,7 @@ import com.example.fitness.model.request.WorkoutRequest;
 import com.example.fitness.service.ExerciseService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -39,5 +40,10 @@ public class ExerciseController {
     @GetMapping("/{exerciseId}")
     public Exercise getByID(@PathVariable Integer exerciseId){
         return exerciseService.getExerciseById(exerciseId);
+    }
+    @DeleteMapping("/{workoutId}/{guestId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteExercise(@PathVariable Integer workoutId, @PathVariable Integer guestId){
+        exerciseService.deleteExercise(workoutId, guestId);
     }
 }

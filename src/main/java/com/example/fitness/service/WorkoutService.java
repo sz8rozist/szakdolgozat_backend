@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class WorkoutService {
@@ -84,5 +85,14 @@ public class WorkoutService {
         workout.setRepetitions(workoutUpdateRequest.getRepetitions());
         workout.setSets(workoutUpdateRequest.getSets());
         workoutRepository.save(workout);
+    }
+
+    public void deleteWorkout(Integer guestId, LocalDate workoutDate) {
+        List<Workout> workouts = workoutRepository.findWorkoutsByGuestIdAndWorkoutDate(guestId, workoutDate);
+        for(Workout w: workouts){
+            Optional<WorkoutGuest> workoutGuest = workoutGuestRepository.findWorkoutGuestByWorkoutIdAndGuestId(w.getId(), guestId);
+            workoutGuest.ifPresent(workoutGuestRepository::delete);
+        }
+        workoutRepository.deleteAll(workouts);
     }
 }
