@@ -70,6 +70,10 @@ public class HandlerException {
     public ResponseEntity<Object> handleWorkoutNotFoundException(WorkoutNotFoundException exception){
         return buildResponseEntity(new Error(HttpStatus.NOT_FOUND, exception.getMessage()));
     }
+    @ExceptionHandler({UserNotFoundException.class})
+    public ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException exception){
+        return buildResponseEntity(new Error(HttpStatus.NOT_FOUND, exception.getMessage()));
+    }
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
