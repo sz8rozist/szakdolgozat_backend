@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -16,8 +17,8 @@ public class Message {
     private Integer id;
 
     private String message;
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime dateTime;
+    @Temporal(TemporalType.DATE)
+    private String dateTime;
 
     private Boolean readed;
 

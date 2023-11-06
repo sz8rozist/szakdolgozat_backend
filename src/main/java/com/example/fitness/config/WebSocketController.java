@@ -29,7 +29,7 @@ public class WebSocketController {
     @MessageMapping("/chat.sendPrivateMessage")
     @SendTo("/topic/public")
     public ChatMessage sendPrivateMessage(@Payload ChatMessage chatMessage) {
-        System.out.println(chatMessage.getMessage());
+        System.out.println(chatMessage.getDateTime());
         User sender = userRepository.findById(chatMessage.getSenderUserId()).orElse(null);
         User receiver = userRepository.findById(chatMessage.getReceiverUserId()).orElse(null);
 
@@ -44,7 +44,7 @@ public class WebSocketController {
         entity.setSenderUser(sender);
         entity.setReceiverUser(receiver);
         entity.setMessage(chatMessage.getMessage());
-        entity.setDateTime(LocalDateTime.now());
+        entity.setDateTime(chatMessage.getDateTime());
         entity.setReaded(false);
         messageRepository.save(entity);
 
