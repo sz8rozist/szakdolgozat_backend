@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileNotFoundException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -70,6 +71,11 @@ public class UserController {
     @PutMapping("/password/{userId}")
     public void changePassword(@RequestBody CheckPasswordRequest checkPasswordRequest, @PathVariable int userId){
         userService.changePassword(checkPasswordRequest, userId);
+    }
+
+    @GetMapping
+    public List<UserResponse> getAllUser(){
+        return userService.getAllUser();
     }
 
 }

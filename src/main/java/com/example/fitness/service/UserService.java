@@ -205,4 +205,19 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(checkPasswordRequest.getPassword()));
         userRepository.save(user);
     }
+
+    public List<UserResponse> getAllUser() {
+        List<User> users = userRepository.findAll();
+        List<UserResponse> userResponses = new ArrayList<>();
+        for(User u: users){
+            UserResponse userResponse = new UserResponse();
+            userResponse.setUser(u);
+            Guest guest = guestRepository.findByUserId(u.getId()).orElse(null);
+            Trainer trainer = trainerRepository.findByUserId(u.getId()).orElse(null);
+            userResponse.setTrainer(trainer);
+            userResponse.setGuest(guest);
+            userResponses.add(userResponse);
+        }
+        return userResponses;
+    }
 }

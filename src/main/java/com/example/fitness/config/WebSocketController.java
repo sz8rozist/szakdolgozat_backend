@@ -28,7 +28,7 @@ public class WebSocketController {
 
     @MessageMapping("/chat.sendPrivateMessage")
     @SendTo("/topic/public")
-    public ChatMessage sendPrivateMessage(@Payload ChatMessage chatMessage) {
+    public Message sendPrivateMessage(@Payload ChatMessage chatMessage) {
         System.out.println(chatMessage.getDateTime());
         User sender = userRepository.findById(chatMessage.getSenderUserId()).orElse(null);
         User receiver = userRepository.findById(chatMessage.getReceiverUserId()).orElse(null);
@@ -49,6 +49,6 @@ public class WebSocketController {
         messageRepository.save(entity);
 
         // Üzenet küldése a megfelelő címzettnek (receiverUserId)
-        return chatMessage;
+        return entity;
     }
 }
