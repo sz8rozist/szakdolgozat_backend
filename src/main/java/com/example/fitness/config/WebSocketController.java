@@ -6,10 +6,12 @@ import com.example.fitness.model.User;
 import com.example.fitness.model.request.ChatMessage;
 import com.example.fitness.repository.MessageRepository;
 import com.example.fitness.repository.UserRepository;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
 
 import java.time.LocalDateTime;
@@ -26,10 +28,8 @@ public class WebSocketController {
         this.messagingTemplate = messagingTemplate;
     }
 
-    @MessageMapping("/chat.sendPrivateMessage")
-    @SendTo("/topic/public")
-    public Message sendPrivateMessage(@Payload ChatMessage chatMessage) {
-        System.out.println(chatMessage.getDateTime());
+    @MessageMapping("/chat.sendPrivateMessage/{receiverId}")
+    public void sendPrivateMessage(@DestinationVariable Integer receiverId,@Payload ChatMessage chatMessage) {
         User sender = userRepository.findById(chatMessage.getSenderUserId()).orElse(null);
         User receiver = userRepository.findById(chatMessage.getReceiverUserId()).orElse(null);
 
@@ -49,6 +49,6 @@ public class WebSocketController {
         messageRepository.save(entity);
 
         // Üzenet küldése a megfelelő címzettnek (receiverUserId)
-        return entity;
+        messagingTemplate.convertAndSend("/queue/private/" + receiverId, entity);
     }
 }
