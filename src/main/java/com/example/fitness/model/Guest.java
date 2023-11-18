@@ -1,5 +1,6 @@
 package com.example.fitness.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -34,11 +35,12 @@ public class Guest{
     @OneToMany(mappedBy = "guest")
     private List<Notification> notifications;
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference(value = "guest")
+    @JsonIgnore
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JsonIgnore
     private Trainer trainer;
 
     @OneToMany(mappedBy = "guest")

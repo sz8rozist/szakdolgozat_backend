@@ -2,6 +2,7 @@ package com.example.fitness.controller;
 
 
 import com.example.fitness.model.Message;
+import com.example.fitness.model.dto.MessageDto;
 import com.example.fitness.service.MessageService;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +19,7 @@ public class MessageController {
     }
 
     @GetMapping("/{senderUserId}/{receiverUserId}")
-    public List<Message> getMessages(@PathVariable Integer senderUserId, @PathVariable Integer receiverUserId){
+    public List<MessageDto> getMessages(@PathVariable Integer senderUserId, @PathVariable Integer receiverUserId){
         return messageService.getAllMessage(senderUserId, receiverUserId);
     }
 

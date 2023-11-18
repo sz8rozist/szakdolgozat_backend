@@ -1,4 +1,4 @@
-package com.example.fitness.model.response;
+package com.example.fitness.model.dto;
 
 
 import lombok.*;
@@ -9,6 +9,6 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginResponse {
+public class LoginDto {
     private String token;
 }

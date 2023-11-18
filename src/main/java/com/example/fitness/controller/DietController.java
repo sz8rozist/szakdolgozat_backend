@@ -3,7 +3,7 @@ package com.example.fitness.controller;
 import com.example.fitness.model.Diet;
 import com.example.fitness.model.request.DietRequest;
 import com.example.fitness.model.request.DietUpdateRequest;
-import com.example.fitness.model.response.DietResponse;
+import com.example.fitness.model.dto.DietDto;
 import com.example.fitness.service.DietService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +25,7 @@ public class DietController {
         dietService.saveDiet(dietFoodList);
     }
     @GetMapping("/{guestId}/{dietDate}")
-    public DietResponse getDietByDateAndUserId(@PathVariable Integer guestId, @PathVariable LocalDate dietDate){
+    public DietDto getDietByDateAndUserId(@PathVariable Integer guestId, @PathVariable LocalDate dietDate){
         return dietService.getDietByDateAndUserId(guestId, dietDate);
     }
 

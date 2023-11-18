@@ -1,5 +1,6 @@
 package com.example.fitness.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,10 +25,12 @@ public class Message {
 
     @ManyToOne
     @JoinColumn(name = "sender_user_id")
+    @JsonIgnore
     private User senderUser;
 
     @ManyToOne
     @JoinColumn(name = "receiver_user_id")
+    @JsonIgnore
     private User receiverUser;
 
 }

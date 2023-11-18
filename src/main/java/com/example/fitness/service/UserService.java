@@ -6,12 +6,12 @@ import com.example.fitness.exception.InvalidUsernameOrPasswordException;
 import com.example.fitness.exception.UserExsistException;
 import com.example.fitness.exception.UsernameIsExsistsException;
 import com.example.fitness.model.*;
+import com.example.fitness.model.dto.UserDto;
 import com.example.fitness.model.request.CheckPasswordRequest;
 import com.example.fitness.model.request.LoginRequest;
 import com.example.fitness.model.request.SignupRequest;
 import com.example.fitness.model.request.UpdateProfile;
-import com.example.fitness.model.response.LoginResponse;
-import com.example.fitness.model.response.UserResponse;
+import com.example.fitness.model.dto.LoginDto;
 import com.example.fitness.repository.GuestRepository;
 import com.example.fitness.repository.TrainerRepository;
 import com.example.fitness.repository.UserRepository;
@@ -52,11 +52,11 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public LoginResponse authenticate(LoginRequest authRequest) throws InvalidUsernameOrPasswordException{
+    public LoginDto authenticate(LoginRequest authRequest) throws InvalidUsernameOrPasswordException{
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
             String token = jwtUtil.createToken(authRequest.getUsername());
-            LoginResponse response = new LoginResponse();
+            LoginDto response = new LoginDto();
             response.setToken(token);
             return response;
         } catch (AuthenticationException ex) {
@@ -97,18 +97,12 @@ public class UserService {
         return newUser;
     }
 
-    public UserResponse getUserByID(Integer userId) {
+    public User getUserByID(Integer userId) {
         User user = userRepository.findById(userId).orElse(null);
         if(user == null){
             throw new UserExsistException("A felhasználó nem található!");
         }
-        UserResponse userResponse = new UserResponse();
-        userResponse.setUser(user);
-        Guest guest = guestRepository.findByUserId(userId).orElse(null);
-        Trainer trainer = trainerRepository.findByUserId(userId).orElse(null);
-        userResponse.setGuest(guest);
-        userResponse.setTrainer(trainer);
-        return userResponse;
+        return user;
     }
 
     public String uploadProfilePicture(MultipartFile multipartFile, int userId) throws FileIsEmptyException {
@@ -206,18 +200,24 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public List<UserResponse> getAllUser() {
-        List<User> users = userRepository.findAll();
-        List<UserResponse> userResponses = new ArrayList<>();
-        for(User u: users){
-            UserResponse userResponse = new UserResponse();
-            userResponse.setUser(u);
-            Guest guest = guestRepository.findByUserId(u.getId()).orElse(null);
-            Trainer trainer = trainerRepository.findByUserId(u.getId()).orElse(null);
-            userResponse.setTrainer(trainer);
-            userResponse.setGuest(guest);
-            userResponses.add(userResponse);
+    public List<UserDto> getAllUser() {
+        List<User> userList = userRepository.findAll();
+        List<UserDto> userDTOs = new ArrayList<>();
+        for(User u: userList){
+            UserDto userDTO = new UserDto();
+            userDTO.setId(u.getId());
+            userDTO.setUsername(u.getUsername());
+            userDTO.setProfilePictureName(u.getProfilePictureName());
+            if (u.getTrainer().isPresent()) {
+                userDTO.setFirstName(u.getTrainer().get().getFirst_name());
+                userDTO.setLastName(u.getTrainer().get().getLast_name());
+            }
+            if (u.getGuest().isPresent()) {
+                userDTO.setFirstName(u.getGuest().get().getFirst_name());
+                userDTO.setLastName(u.getGuest().get().getLast_name());
+            }
+            userDTOs.add(userDTO);
         }
-        return userResponses;
+        return userDTOs;
     }
 }

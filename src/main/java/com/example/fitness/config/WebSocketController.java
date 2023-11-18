@@ -3,18 +3,15 @@ package com.example.fitness.config;
 import com.example.fitness.exception.UserNotFoundException;
 import com.example.fitness.model.Message;
 import com.example.fitness.model.User;
-import com.example.fitness.model.request.ChatMessage;
+import com.example.fitness.model.dto.MessageDto;
 import com.example.fitness.repository.MessageRepository;
 import com.example.fitness.repository.UserRepository;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
 
-import java.time.LocalDateTime;
 @Controller
 public class WebSocketController {
 
@@ -29,7 +26,7 @@ public class WebSocketController {
     }
 
     @MessageMapping("/chat.sendPrivateMessage/{receiverId}")
-    public void sendPrivateMessage(@DestinationVariable Integer receiverId,@Payload ChatMessage chatMessage) {
+    public void sendPrivateMessage(@DestinationVariable Integer receiverId, @Payload MessageDto chatMessage) {
         User sender = userRepository.findById(chatMessage.getSenderUserId()).orElse(null);
         User receiver = userRepository.findById(chatMessage.getReceiverUserId()).orElse(null);
 
@@ -45,7 +42,8 @@ public class WebSocketController {
         entity.setReceiverUser(receiver);
         entity.setMessage(chatMessage.getMessage());
         entity.setDateTime(chatMessage.getDateTime());
-        entity.setReaded(false);
+        entity.setReaded(chatMessage.isReaded());
+        System.out.println(entity.getMessage() + " " + entity.getReceiverUser().getUsername());
         messageRepository.save(entity);
 
         // Üzenet küldése a megfelelő címzettnek (receiverUserId)

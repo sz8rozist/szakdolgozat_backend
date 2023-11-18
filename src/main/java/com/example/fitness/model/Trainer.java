@@ -1,11 +1,13 @@
 package com.example.fitness.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,8 +30,7 @@ public class Trainer {
     private List<Notification> notifications;
 
 
-    @OneToMany(mappedBy = "trainer")
-    @JsonIgnore
+    @OneToMany(mappedBy = "trainer",  fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Guest> guests;
 
     @OneToMany(mappedBy = "trainer")
@@ -39,7 +40,7 @@ public class Trainer {
     Set<WorkoutGuest> workoutGuests;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonManagedReference(value = "trainer")
+    @JsonIgnore
     @JoinColumn(name = "user_id")
     private User user;
 }

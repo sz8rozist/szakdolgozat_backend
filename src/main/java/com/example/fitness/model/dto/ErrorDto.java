@@ -1,4 +1,4 @@
-package com.example.fitness.model.response;
+package com.example.fitness.model.dto;
 
 import lombok.*;
 import org.springframework.http.HttpStatus;
@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ErrorResponse {
+public class ErrorDto {
     HttpStatus httpStatus;
     String message;
 }

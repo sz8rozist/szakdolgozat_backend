@@ -1,11 +1,11 @@
 package com.example.fitness.controller;
 import com.example.fitness.model.User;
+import com.example.fitness.model.dto.UserDto;
 import com.example.fitness.model.request.CheckPasswordRequest;
 import com.example.fitness.model.request.LoginRequest;
 import com.example.fitness.model.request.SignupRequest;
 import com.example.fitness.model.request.UpdateProfile;
-import com.example.fitness.model.response.LoginResponse;
-import com.example.fitness.model.response.UserResponse;
+import com.example.fitness.model.dto.LoginDto;
 import com.example.fitness.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/login")
-    public LoginResponse login(@RequestBody LoginRequest authRequest){
+    public LoginDto login(@RequestBody LoginRequest authRequest){
        return userService.authenticate(authRequest);
     }
 
@@ -37,7 +37,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public UserResponse getUserByID(@PathVariable Integer userId){
+    public User getUserByID(@PathVariable Integer userId){
         return userService.getUserByID(userId);
     }
 
@@ -74,7 +74,7 @@ public class UserController {
     }
 
     @GetMapping
-    public List<UserResponse> getAllUser(){
+    public List<UserDto> getAllUser(){
         return userService.getAllUser();
     }
 

@@ -1,4 +1,4 @@
-package com.example.fitness.model.response;
+package com.example.fitness.model.dto;
 
 import com.example.fitness.model.Diet;
 import lombok.Data;
@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 @Getter
 @Setter
-public class DietResponse {
+public class DietDto {
     private List<Diet> diet;
     private int calorieSum;
     private int proteinSum;

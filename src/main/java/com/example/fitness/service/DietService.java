@@ -2,11 +2,10 @@ package com.example.fitness.service;
 
 import com.example.fitness.exception.DietNotFouncException;
 import com.example.fitness.exception.FoodNotFoundException;
-import com.example.fitness.exception.GuestNotFoundException;
 import com.example.fitness.model.*;
 import com.example.fitness.model.request.DietRequest;
 import com.example.fitness.model.request.DietUpdateRequest;
-import com.example.fitness.model.response.DietResponse;
+import com.example.fitness.model.dto.DietDto;
 import com.example.fitness.repository.*;
 import org.springframework.stereotype.Service;
 
@@ -54,7 +53,7 @@ public class DietService {
         dietGuestRepository.saveAll(dietGuests);
     }
 
-    public DietResponse getDietByDateAndUserId(Integer guestId, LocalDate dietDate) {
+    public DietDto getDietByDateAndUserId(Integer guestId, LocalDate dietDate) {
         List<Diet> diets = dietRepository.findDietsByGuestIdAndDietDate(guestId,dietDate);
         int calorieSum = 0;
         int proteinSum = 0;
@@ -66,7 +65,7 @@ public class DietService {
             carbonhydrateSum += (int) d.getFood().getCarbonhydrate();
             fatSum += (int) d.getFood().getFat();
         }
-        DietResponse dietResponse = new DietResponse();
+        DietDto dietResponse = new DietDto();
         dietResponse.setDiet(diets);
         dietResponse.setCalorieSum(calorieSum);
         dietResponse.setProteinSum(proteinSum);
