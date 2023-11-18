@@ -11,9 +11,5 @@ import java.util.Optional;
 
 @Repository
 public interface TrainerRepository extends JpaRepository<Trainer, Integer> {
-
-    @Query("SELECT t, u.profilePictureName FROM Trainer t JOIN t.user u")
-    List<Object[]> findTrainersWithProfileImage();
-
     Optional<Trainer> findByUserId(Integer user_id);
 }

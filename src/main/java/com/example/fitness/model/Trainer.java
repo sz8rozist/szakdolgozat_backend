@@ -38,7 +38,7 @@ public class Trainer {
     @OneToMany(mappedBy = "trainer")
     Set<WorkoutGuest> workoutGuests;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference(value = "trainer")
     @JoinColumn(name = "user_id")
     private User user;
