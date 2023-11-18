@@ -34,9 +34,11 @@ public class Trainer {
     private List<Guest> guests;
 
     @OneToMany(mappedBy = "trainer")
+    @JsonIgnore
     Set<DietGuest> dietGuests;
 
     @OneToMany(mappedBy = "trainer")
+    @JsonIgnore
     Set<WorkoutGuest> workoutGuests;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)

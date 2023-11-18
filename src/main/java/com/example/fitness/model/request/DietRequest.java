@@ -13,6 +13,6 @@ public class DietRequest {
     private FoodType type;
     private String date;
     private int foodId;
-    private int userId;
+    private int guestId;
     private Integer trainerId;
 }

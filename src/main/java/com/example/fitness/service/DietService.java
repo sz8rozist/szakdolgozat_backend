@@ -44,7 +44,12 @@ public class DietService {
                 diet.setType(FoodType.valueOf(d.getType().name()));
                 diet.setFood(food);
                 dietGuest.setDiet(diet);
-                dietGuest.setGuest(userRepository.findById(d.getUserId()).get().getGuest().get());
+                Optional<Guest> guest = guestRepository.findById(d.getGuestId());
+                guest.ifPresent(dietGuest::setGuest);
+                if(d.getTrainerId() != null){
+                    Optional<Trainer> trainer = trainerRepository.findById(d.getTrainerId());
+                    trainer.ifPresent(dietGuest::setTrainer);
+                }
                 diets.add(diet);
                 dietGuests.add(dietGuest);
             }
