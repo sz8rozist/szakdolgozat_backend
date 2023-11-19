@@ -73,7 +73,7 @@ public class WebSocketController {
         notification.setTrainer(trainer);
         notification.setType(NotificationType.FEEDBACK);
         notificationRepository.save(notification);
-        messagingTemplate.convertAndSend("/queue/trainerNotification/" + trainerId, trainerDietNotificationDto);
+        messagingTemplate.convertAndSend("/queue/trainerNotification/" + trainer.getUser().getId(), trainerDietNotificationDto);
 
     }
 }
