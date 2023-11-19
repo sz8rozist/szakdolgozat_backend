@@ -1,5 +1,6 @@
 package com.example.fitness.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,10 +16,12 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-   @ManyToOne(targetEntity = Trainer.class)
+   @ManyToOne
+   @JsonIgnore
     private Trainer trainer;
 
-   @ManyToOne(targetEntity = Guest.class)
+   @ManyToOne
+   @JsonIgnore
    private Guest guest;
 
    private String message;

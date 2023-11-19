@@ -22,7 +22,8 @@ public class Diet {
     private int quantity;
     @Enumerated(EnumType.STRING)
     private FoodType type;
-
+    @Column(name = "eated", columnDefinition = "TINYINT DEFAULT 0")
+    private boolean eated;
     @Temporal(TemporalType.DATE)
     private LocalDate date;
 

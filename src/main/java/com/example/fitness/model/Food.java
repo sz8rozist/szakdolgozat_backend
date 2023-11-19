@@ -21,7 +21,7 @@ public class Food {
     @NotEmpty(message = "Az étel nevének megadása kötelező.")
     private String name;
     @NotNull(message = "Az étel kalória tartalmának megadása kötelező.")
-    private int calorie;
+    private float calorie;
     @NotNull(message = "Az étel fehérje tartalmának megadása kötelező.")
     private float protein;
     @NotNull(message = "Az étel szénhidrát tartalmának megadása kötelező.")

@@ -1,11 +1,12 @@
 package com.example.fitness.config;
 
+import com.example.fitness.exception.GuestNotFoundException;
+import com.example.fitness.exception.TrainerNotFoundException;
 import com.example.fitness.exception.UserNotFoundException;
-import com.example.fitness.model.Message;
-import com.example.fitness.model.User;
+import com.example.fitness.model.*;
 import com.example.fitness.model.dto.MessageDto;
-import com.example.fitness.repository.MessageRepository;
-import com.example.fitness.repository.UserRepository;
+import com.example.fitness.model.dto.TrainerDietNotificationDto;
+import com.example.fitness.repository.*;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -17,11 +18,17 @@ public class WebSocketController {
 
     private final MessageRepository messageRepository;
     private final UserRepository userRepository;
+    private final GuestRepository guestRepository;
+    private final TrainerRepository trainerRepository;
+    private final NotificationRepository notificationRepository;
     private final SimpMessagingTemplate messagingTemplate;
 
-    public WebSocketController(MessageRepository messageRepository, UserRepository userRepository, SimpMessagingTemplate messagingTemplate) {
+    public WebSocketController(MessageRepository messageRepository, UserRepository userRepository, GuestRepository guestRepository, TrainerRepository trainerRepository, NotificationRepository notificationRepository, SimpMessagingTemplate messagingTemplate) {
         this.messageRepository = messageRepository;
         this.userRepository = userRepository;
+        this.guestRepository = guestRepository;
+        this.trainerRepository = trainerRepository;
+        this.notificationRepository = notificationRepository;
         this.messagingTemplate = messagingTemplate;
     }
 
@@ -47,6 +54,26 @@ public class WebSocketController {
         messageRepository.save(entity);
 
         // Üzenet küldése a megfelelő címzettnek (receiverUserId)
-        messagingTemplate.convertAndSend("/queue/private/" + receiverId, entity);
+        messagingTemplate.convertAndSend("/queue/private/" + receiverId, chatMessage);
+    }
+    @MessageMapping("/trainer.diet/{trainerId}")
+    public void sendNotificationToTrainer(@DestinationVariable Integer trainerId, @Payload TrainerDietNotificationDto trainerDietNotificationDto){
+        Guest guest = guestRepository.findById(trainerDietNotificationDto.getGuestId()).orElse(null);
+        Trainer trainer = trainerRepository.findById(trainerId).orElse(null);
+        if(guest == null){
+            throw new GuestNotFoundException("Nem található vendég!");
+        }
+        if(trainer == null){
+            throw new TrainerNotFoundException("Nem található edző!");
+        }
+        // ITT még az ételnél az eated mezőt truera kell rakni
+        Notification notification = new Notification();
+        notification.setMessage(trainerDietNotificationDto.getMessage());
+        notification.setGuest(guest);
+        notification.setTrainer(trainer);
+        notification.setType(NotificationType.FEEDBACK);
+        notificationRepository.save(notification);
+        messagingTemplate.convertAndSend("/queue/trainerNotification/" + trainerId, trainerDietNotificationDto);
+
     }
 }

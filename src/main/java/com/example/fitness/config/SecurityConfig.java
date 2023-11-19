@@ -38,7 +38,7 @@ public class SecurityConfig {
             return http
                     .csrf(AbstractHttpConfigurer::disable)
                     //Trainer, food, diet routingokat nem szabad mindenhol átengedni.
-                    .authorizeHttpRequests(auth -> auth.requestMatchers("/user/**", "/trainer/**", "/food/**","/exercise/**", "/diet/**", "/workout/**", "/ws/**", "/message/**").permitAll().requestMatchers("/home/**").hasAuthority("GUEST").anyRequest().authenticated())
+                    .authorizeHttpRequests(auth -> auth.requestMatchers("/user/**", "/trainer/**", "/food/**","/exercise/**", "/diet/**", "/workout/**", "/ws/**", "/message/**", "/guest/**").permitAll().requestMatchers("/home/**").hasAuthority("GUEST").anyRequest().authenticated())
                     .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                     .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                     .httpBasic(Customizer.withDefaults())

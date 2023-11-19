@@ -3,9 +3,10 @@ package com.example.fitness.service;
 import com.example.fitness.exception.DietNotFouncException;
 import com.example.fitness.exception.FoodNotFoundException;
 import com.example.fitness.model.*;
+import com.example.fitness.model.dto.DietDto;
 import com.example.fitness.model.request.DietRequest;
 import com.example.fitness.model.request.DietUpdateRequest;
-import com.example.fitness.model.dto.DietDto;
+import com.example.fitness.model.dto.DietGuestDto;
 import com.example.fitness.repository.*;
 import org.springframework.stereotype.Service;
 
@@ -58,19 +59,39 @@ public class DietService {
         dietGuestRepository.saveAll(dietGuests);
     }
 
-    public DietDto getDietByDateAndUserId(Integer guestId, LocalDate dietDate) {
-        List<Diet> diets = dietRepository.findDietsByGuestIdAndDietDate(guestId,dietDate);
+    public DietGuestDto getDietByDateAndUserId(Integer guestId, LocalDate dietDate) {
+        List<DietGuest> dietGuests = dietGuestRepository.findDietGuestByGuestId(guestId);
+        List<DietDto> diets = new ArrayList<>();
+
+        for(DietGuest dg: dietGuests){
+            System.out.println(dg.getDiet());
+            if(dg.getDiet().getDate().equals(dietDate)){
+                DietDto dietDto = new DietDto();
+                dietDto.setDietId(dg.getDiet().getId());
+                dietDto.setTrainerId(dg.getTrainer().getId());
+                dietDto.setFat(dg.getDiet().getFood().getFat());
+                dietDto.setCalorie(dg.getDiet().getFood().getCalorie());
+                dietDto.setCarbonhydrate(dg.getDiet().getFood().getCarbonhydrate());
+                dietDto.setProtein(dg.getDiet().getFood().getProtein());
+                dietDto.setEated(dg.getDiet().isEated());
+                dietDto.setName(dg.getDiet().getFood().getName());
+                dietDto.setQuantity(dg.getDiet().getQuantity());
+                dietDto.setFoodType(dg.getDiet().getType());
+                dietDto.setFoodId(dg.getDiet().getFood().getId());
+                diets.add(dietDto);
+            }
+        }
         int calorieSum = 0;
         int proteinSum = 0;
         int carbonhydrateSum= 0;
         int fatSum = 0;
-        for(Diet d: diets){
-            calorieSum += d.getFood().getCalorie();
-            proteinSum += (int) d.getFood().getProtein();
-            carbonhydrateSum += (int) d.getFood().getCarbonhydrate();
-            fatSum += (int) d.getFood().getFat();
+        for(DietDto d: diets){
+            calorieSum += d.getCalorie();
+            proteinSum +=  d.getProtein();
+            carbonhydrateSum += d.getCarbonhydrate();
+            fatSum += d.getFat();
         }
-        DietDto dietResponse = new DietDto();
+        DietGuestDto dietResponse = new DietGuestDto();
         dietResponse.setDiet(diets);
         dietResponse.setCalorieSum(calorieSum);
         dietResponse.setProteinSum(proteinSum);
