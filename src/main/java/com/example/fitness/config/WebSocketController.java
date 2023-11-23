@@ -1,11 +1,9 @@
 package com.example.fitness.config;
 
-import com.example.fitness.exception.GuestNotFoundException;
-import com.example.fitness.exception.TrainerNotFoundException;
-import com.example.fitness.exception.UserNotFoundException;
+import com.example.fitness.exception.*;
 import com.example.fitness.model.*;
 import com.example.fitness.model.dto.MessageDto;
-import com.example.fitness.model.dto.TrainerDietNotificationDto;
+import com.example.fitness.model.dto.TrainerDietNotificationRequestDto;
 import com.example.fitness.repository.*;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -22,14 +20,18 @@ public class WebSocketController {
     private final TrainerRepository trainerRepository;
     private final NotificationRepository notificationRepository;
     private final SimpMessagingTemplate messagingTemplate;
+    private final FoodRepository foodRepository;
+    private final DietRepository dietRepository;
 
-    public WebSocketController(MessageRepository messageRepository, UserRepository userRepository, GuestRepository guestRepository, TrainerRepository trainerRepository, NotificationRepository notificationRepository, SimpMessagingTemplate messagingTemplate) {
+    public WebSocketController(MessageRepository messageRepository, UserRepository userRepository, GuestRepository guestRepository, TrainerRepository trainerRepository, NotificationRepository notificationRepository, SimpMessagingTemplate messagingTemplate, FoodRepository foodRepository, DietRepository dietRepository) {
         this.messageRepository = messageRepository;
         this.userRepository = userRepository;
         this.guestRepository = guestRepository;
         this.trainerRepository = trainerRepository;
         this.notificationRepository = notificationRepository;
         this.messagingTemplate = messagingTemplate;
+        this.foodRepository = foodRepository;
+        this.dietRepository = dietRepository;
     }
 
     @MessageMapping("/chat.sendPrivateMessage/{receiverId}")
@@ -57,9 +59,17 @@ public class WebSocketController {
         messagingTemplate.convertAndSend("/queue/private/" + receiverId, chatMessage);
     }
     @MessageMapping("/trainer.diet/{trainerId}")
-    public void sendNotificationToTrainer(@DestinationVariable Integer trainerId, @Payload TrainerDietNotificationDto trainerDietNotificationDto){
+    public void sendNotificationToTrainer(@DestinationVariable Integer trainerId, @Payload TrainerDietNotificationRequestDto trainerDietNotificationDto){
         Guest guest = guestRepository.findById(trainerDietNotificationDto.getGuestId()).orElse(null);
         Trainer trainer = trainerRepository.findById(trainerId).orElse(null);
+        Food food = foodRepository.findById(trainerDietNotificationDto.getFoodId()).orElse(null);
+        Diet diet = dietRepository.findById(trainerDietNotificationDto.getDietId()).orElse(null);
+        if(diet == null){
+            throw new DietNotFouncException("Az étrend nem található!");
+        }
+        if(food == null){
+            throw new FoodNotFoundException("Az étel nem található!");
+        }
         if(guest == null){
             throw new GuestNotFoundException("Nem található vendég!");
         }
@@ -68,12 +78,14 @@ public class WebSocketController {
         }
         // ITT még az ételnél az eated mezőt truera kell rakni
         Notification notification = new Notification();
-        notification.setMessage(trainerDietNotificationDto.getMessage());
+        notification.setMessage(guest.getFirst_name() + " " + guest.getLast_name() + " elfogyasztotta a " + food.getName() + " ételt.");
         notification.setGuest(guest);
         notification.setTrainer(trainer);
         notification.setType(NotificationType.FEEDBACK);
+        diet.setEated(true);
+        dietRepository.save(diet);
         notificationRepository.save(notification);
-        messagingTemplate.convertAndSend("/queue/trainerNotification/" + trainer.getUser().getId(), trainerDietNotificationDto);
+        messagingTemplate.convertAndSend("/queue/trainerNotification/" + trainer.getUser().getId(), notification);
 
     }
 }

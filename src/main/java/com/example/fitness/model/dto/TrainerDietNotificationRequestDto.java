@@ -7,8 +7,9 @@ import lombok.Setter;
 @Data
 @Getter
 @Setter
-public class TrainerDietNotificationDto {
+public class TrainerDietNotificationRequestDto {
     private int trainerId;
-    private String message;
     private int guestId;
+    private int foodId;
+    private int dietId;
 }
