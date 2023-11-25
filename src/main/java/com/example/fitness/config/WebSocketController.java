@@ -81,7 +81,7 @@ public class WebSocketController {
         notification.setMessage(guest.getFirst_name() + " " + guest.getLast_name() + " elfogyasztotta a " + food.getName() + " ételt.");
         notification.setGuest(guest);
         notification.setTrainer(trainer);
-        notification.setType(NotificationType.FEEDBACK);
+        notification.setType(NotificationType.DIET);
         diet.setEated(true);
         dietRepository.save(diet);
         notificationRepository.save(notification);
