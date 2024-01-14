@@ -1,6 +1,7 @@
 package com.example.fitness.controller;
 
 import com.example.fitness.model.Diet;
+import com.example.fitness.model.dto.DietSummary;
 import com.example.fitness.model.request.DietRequest;
 import com.example.fitness.model.request.DietUpdateRequest;
 import com.example.fitness.model.dto.DietGuestDto;
@@ -50,5 +51,10 @@ public class DietController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updateDiet(@RequestBody DietUpdateRequest dietUpdateRequest, @PathVariable Integer dietId){
         dietService.updateDiet(dietUpdateRequest, dietId);
+    }
+
+    @GetMapping("/macronutriense/{guestUserId}")
+    public List<DietSummary> getMacronutrienseStatistics(@PathVariable Integer guestUserId){
+        return this.dietService.getMacronutrienseStatisztics(guestUserId);
     }
  }

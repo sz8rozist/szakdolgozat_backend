@@ -2,8 +2,10 @@ package com.example.fitness.service;
 
 import com.example.fitness.exception.DietNotFouncException;
 import com.example.fitness.exception.FoodNotFoundException;
+import com.example.fitness.exception.GuestNotFoundException;
 import com.example.fitness.model.*;
 import com.example.fitness.model.dto.DietDto;
+import com.example.fitness.model.dto.DietSummary;
 import com.example.fitness.model.request.DietRequest;
 import com.example.fitness.model.request.DietUpdateRequest;
 import com.example.fitness.model.dto.DietGuestDto;
@@ -138,5 +140,10 @@ public class DietService {
         diet.setQuantity(dietUpdateRequest.getQuantity());
         diet.setType(dietUpdateRequest.getType());
         dietRepository.save(diet);
+    }
+
+    public List<DietSummary> getMacronutrienseStatisztics(Integer guestUserId) {
+        Guest guest = guestRepository.findByUserId(guestUserId).orElseThrow(() -> new GuestNotFoundException("Vendég nem található: "+ guestUserId));
+        return dietRepository.getDietSummary(guest.getId());
     }
 }
