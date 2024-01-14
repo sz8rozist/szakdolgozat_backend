@@ -1,5 +1,6 @@
 package com.example.fitness.service;
 
+import com.example.fitness.exception.DietRecommendationNotFoundException;
 import com.example.fitness.exception.GuestNotFoundException;
 import com.example.fitness.exception.TrainerNotFoundException;
 import com.example.fitness.model.DietRecommedation;
@@ -9,6 +10,8 @@ import com.example.fitness.repository.DietRecommendationRepository;
 import com.example.fitness.repository.GuestRepository;
 import com.example.fitness.repository.TrainerRepository;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 
 @Service
 public class DietRecommendationService {
@@ -34,5 +37,10 @@ public class DietRecommendationService {
         dietRecommedation.setGuest(guest);
         dietRecommedation.setTrainer(trainer);
         return dietRecommendationRepository.save(dietRecommedation);
+    }
+
+    public DietRecommedation getRecommendationByDateAndGuest(int guestUserId, LocalDate date) throws DietRecommendationNotFoundException {
+        Guest guest = guestRepository.findByUserId(guestUserId).orElseThrow(() -> new GuestNotFoundException("Ez a vendég nem található."));
+        return dietRecommendationRepository.findByGuest_IdAndDate(guest.getId(), date).orElseThrow(() -> new DietRecommendationNotFoundException("Erre a napra nincs tápérték ajánlás: " + date));
     }
 }
