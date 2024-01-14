@@ -10,7 +10,7 @@ import com.example.fitness.model.dto.UserDto;
 import com.example.fitness.model.request.CheckPasswordRequest;
 import com.example.fitness.model.request.LoginRequest;
 import com.example.fitness.model.request.SignupRequest;
-import com.example.fitness.model.request.UpdateProfile;
+import com.example.fitness.model.request.UpdateProfileRequest;
 import com.example.fitness.model.dto.LoginDto;
 import com.example.fitness.repository.GuestRepository;
 import com.example.fitness.repository.TrainerRepository;
@@ -161,24 +161,24 @@ public class UserService {
         }
     }
 
-    public void update(UpdateProfile updateProfile, int userId) {
+    public void update(UpdateProfileRequest updateProfileRequest, int userId) {
         User user = userRepository.findById(userId).orElse(null);
         if(user == null){
             throw new UserExsistException("A felhasználó nem található.");
         }
         user.getGuest().ifPresent(guest -> {
-            guest.setLast_name(updateProfile.getLastName());
-            guest.setFirst_name(updateProfile.getFirstName());
-            guest.setEmail(updateProfile.getEmail());
-            guest.setAge(updateProfile.getAge());
-            guest.setWeight(updateProfile.getWeight());
-            guest.setHeight(updateProfile.getHeight());
+            guest.setLast_name(updateProfileRequest.getLastName());
+            guest.setFirst_name(updateProfileRequest.getFirstName());
+            guest.setEmail(updateProfileRequest.getEmail());
+            guest.setAge(updateProfileRequest.getAge());
+            guest.setWeight(updateProfileRequest.getWeight());
+            guest.setHeight(updateProfileRequest.getHeight());
         });
         user.getTrainer().ifPresent(trainer ->{
-            trainer.setLast_name(updateProfile.getLastName());
-            trainer.setFirst_name(updateProfile.getFirstName());
-            trainer.setEmail(updateProfile.getEmail());
-            trainer.setType(updateProfile.getType());
+            trainer.setLast_name(updateProfileRequest.getLastName());
+            trainer.setFirst_name(updateProfileRequest.getFirstName());
+            trainer.setEmail(updateProfileRequest.getEmail());
+            trainer.setType(updateProfileRequest.getType());
         });
         userRepository.save(user);
     }

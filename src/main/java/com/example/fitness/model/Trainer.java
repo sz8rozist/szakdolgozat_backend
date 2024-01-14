@@ -45,4 +45,7 @@ public class Trainer {
     @JsonIgnore
     @JoinColumn(name = "user_id")
     private User user;
+    @OneToMany(mappedBy = "trainer")
+    @JsonIgnore
+    Set<DietRecommedation> dietRecommedations;
 }

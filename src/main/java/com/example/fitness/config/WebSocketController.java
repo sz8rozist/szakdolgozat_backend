@@ -52,7 +52,6 @@ public class WebSocketController {
         entity.setMessage(chatMessage.getMessage());
         entity.setDateTime(chatMessage.getDateTime());
         entity.setReaded(chatMessage.isReaded());
-        System.out.println(entity.getMessage() + " " + entity.getReceiverUser().getUsername());
         messageRepository.save(entity);
 
         // Üzenet küldése a megfelelő címzettnek (receiverUserId)

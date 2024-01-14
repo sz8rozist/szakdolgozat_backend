@@ -4,7 +4,7 @@ import com.example.fitness.model.dto.UserDto;
 import com.example.fitness.model.request.CheckPasswordRequest;
 import com.example.fitness.model.request.LoginRequest;
 import com.example.fitness.model.request.SignupRequest;
-import com.example.fitness.model.request.UpdateProfile;
+import com.example.fitness.model.request.UpdateProfileRequest;
 import com.example.fitness.model.dto.LoginDto;
 import com.example.fitness.service.UserService;
 import jakarta.validation.Valid;
@@ -59,8 +59,8 @@ public class UserController {
 
     @PutMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updateProfileData(@Valid @RequestBody UpdateProfile updateProfile, @PathVariable int userId){
-        userService.update(updateProfile, userId);
+    public void updateProfileData(@Valid @RequestBody UpdateProfileRequest updateProfileRequest, @PathVariable int userId){
+        userService.update(updateProfileRequest, userId);
     }
 
     @PostMapping("/password/{userId}")

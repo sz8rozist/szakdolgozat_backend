@@ -9,7 +9,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateProfile {
+public class UpdateProfileRequest {
     @NotEmpty(message = "Vezetéknév megadása kötelező.")
     private String firstName;
     @NotEmpty(message = "Keresztnév megadása kötelező.")
