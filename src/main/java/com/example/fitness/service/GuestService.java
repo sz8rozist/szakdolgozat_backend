@@ -5,6 +5,7 @@ import com.example.fitness.model.Trainer;
 import com.example.fitness.repository.GuestRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -18,5 +19,8 @@ public class GuestService {
     public Optional<Trainer> findTrainer(Integer guestId) {
         Optional<Trainer> trainer = guestRepository.findTrainerByGuestId(guestId);
         return trainer;
+    }
+    public List<Guest> getAll() {
+        return guestRepository.findAll();
     }
 }

@@ -39,8 +39,7 @@ public class Guest{
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JsonIgnore
+    @ManyToOne
     private Trainer trainer;
 
     @OneToMany(mappedBy = "guest")

@@ -31,6 +31,7 @@ public class Trainer {
 
 
     @OneToMany(mappedBy = "trainer",  fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Guest> guests;
 
     @OneToMany(mappedBy = "trainer")

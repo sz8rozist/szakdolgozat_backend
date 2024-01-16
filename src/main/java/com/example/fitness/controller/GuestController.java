@@ -1,9 +1,11 @@
 package com.example.fitness.controller;
 
+import com.example.fitness.model.Guest;
 import com.example.fitness.model.Trainer;
 import com.example.fitness.service.GuestService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -19,5 +21,9 @@ public class GuestController {
     @GetMapping("/{guestId}")
     public Optional<Trainer> getTrainer(@PathVariable Integer guestId){
         return guestService.findTrainer(guestId);
+    }
+    @GetMapping
+    public List<Guest> getAllGuest(){
+        return guestService.getAll();
     }
 }
