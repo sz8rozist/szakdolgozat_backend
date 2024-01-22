@@ -13,6 +13,7 @@ import com.example.fitness.model.request.SignupRequest;
 import com.example.fitness.model.request.UpdateProfileRequest;
 import com.example.fitness.model.dto.LoginDto;
 import com.example.fitness.repository.GuestRepository;
+import com.example.fitness.repository.MessageRepository;
 import com.example.fitness.repository.TrainerRepository;
 import com.example.fitness.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,8 @@ public class UserService {
     private JwtUtil jwtUtil;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private MessageRepository messageRepository;
 
     public LoginDto authenticate(LoginRequest authRequest) throws InvalidUsernameOrPasswordException{
         try {
@@ -200,8 +203,8 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public List<UserDto> getAllUser() {
-        List<User> userList = userRepository.findAll();
+    public List<UserDto> getAllUser(Integer userId) {
+        List<User> userList = userRepository.findAllExceptUser(userId);
         List<UserDto> userDTOs = new ArrayList<>();
         for(User u: userList){
             UserDto userDTO = new UserDto();
@@ -216,6 +219,8 @@ public class UserService {
                 userDTO.setFirstName(u.getGuest().get().getFirst_name());
                 userDTO.setLastName(u.getGuest().get().getLast_name());
             }
+            Message message = messageRepository.getLastMessage(u.getId(), userId);
+            userDTO.setLastMessage(message != null ? message.getMessage() : "");
             userDTOs.add(userDTO);
         }
         return userDTOs;

@@ -73,9 +73,9 @@ public class UserController {
         userService.changePassword(checkPasswordRequest, userId);
     }
 
-    @GetMapping
-    public List<UserDto> getAllUser(){
-        return userService.getAllUser();
+    @GetMapping("/userMessages/{userId}")
+    public List<UserDto> getAllUser(@PathVariable Integer userId){
+        return userService.getAllUser(userId);
     }
 
 }

@@ -26,4 +26,12 @@ public class GuestController {
     public List<Guest> getAllGuest(){
         return guestService.getAll();
     }
+    @GetMapping("/{trainerId}/getTrainerGuests")
+    public List<Guest> getTrainerGuests(@PathVariable Integer trainerId){
+        return guestService.getTrainerGuests(trainerId);
+    }
+    @PostMapping("/addTrainerToGuest")
+    public Guest addTrainerToGuest(@RequestParam("trainerId") Integer trainerId, @RequestParam("guestId") Integer guestId){
+        return guestService.addTrainerToGuest(trainerId, guestId);
+    }
 }
