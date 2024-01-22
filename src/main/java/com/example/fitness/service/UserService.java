@@ -219,7 +219,7 @@ public class UserService {
                 userDTO.setFirstName(u.getGuest().get().getFirst_name());
                 userDTO.setLastName(u.getGuest().get().getLast_name());
             }
-            Message message = messageRepository.getLastMessage(u.getId(), userId);
+            Message message = messageRepository.getLastMessage(userId, u.getId());
             userDTO.setLastMessage(message != null ? message.getMessage() : "");
             userDTOs.add(userDTO);
         }

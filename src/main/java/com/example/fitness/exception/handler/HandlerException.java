@@ -79,6 +79,10 @@ public class HandlerException {
     public ResponseEntity<Object> handleDietRecommendationNotFoundException(DietRecommendationNotFoundException exception){
         return buildResponseEntity(new Error(HttpStatus.NOT_FOUND, exception.getMessage()));
     }
+    @ExceptionHandler({MessageNotFoundException.class})
+    public ResponseEntity<Object> handleMessageNotFoundException(MessageNotFoundException exception){
+        return buildResponseEntity(new Error(HttpStatus.NOT_FOUND, exception.getMessage()));
+    }
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {

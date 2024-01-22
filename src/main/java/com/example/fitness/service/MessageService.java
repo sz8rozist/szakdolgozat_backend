@@ -1,5 +1,6 @@
 package com.example.fitness.service;
 
+import com.example.fitness.exception.MessageNotFoundException;
 import com.example.fitness.model.Message;
 import com.example.fitness.model.Trainer;
 import com.example.fitness.model.dto.MessageDto;
@@ -63,5 +64,11 @@ public class MessageService {
                 .collect(Collectors.toList());
 
         return messageDtoList;
+    }
+
+    public void markAsRead(Integer messageId) {
+        Message message = messageRepository.findById(messageId).orElseThrow(() -> new MessageNotFoundException("Az üzenet nem található."));
+        message.setReaded(true);
+        messageRepository.save(message);
     }
 }

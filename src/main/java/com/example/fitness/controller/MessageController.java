@@ -4,6 +4,7 @@ package com.example.fitness.controller;
 import com.example.fitness.model.Message;
 import com.example.fitness.model.dto.MessageDto;
 import com.example.fitness.service.MessageService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,4 +24,9 @@ public class MessageController {
         return messageService.getAllMessage(senderUserId, receiverUserId);
     }
 
+    @PostMapping("/{messageId}/markAsRead")
+    @ResponseStatus(HttpStatus.OK)
+    public void markAsRead(@PathVariable Integer messageId){
+        messageService.markAsRead(messageId);
+    }
 }
