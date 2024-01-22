@@ -27,4 +27,22 @@ public interface DietRepository extends JpaRepository<Diet, Integer> {
             "WHERE dg.guest.id = :guestId AND DAY(d.date) = DAY(CURRENT_DATE) " +
             "GROUP BY d.date, d.type")
     List<DietSummaryDto> getDietSummary(Integer guestId);
+
+    @Query("SELECT SUM(food.calorie) FROM Diet diet " +
+            "INNER JOIN Food food ON diet.food.id = food.id " +
+            "INNER JOIN DietGuest dietGuest ON diet.id = dietGuest.diet.id " +
+            "WHERE diet.date = CURRENT_DATE AND dietGuest.guest.id = :guestId")
+    Double getCaloriesSumByDate(Integer guestId);
+
+    @Query("SELECT SUM(food.calorie) FROM Diet diet " +
+            "INNER JOIN Food food ON diet.food.id = food.id " +
+            "INNER JOIN DietGuest dietGuest ON diet.id = dietGuest.diet.id " +
+            "WHERE WEEK(diet.date) = WEEK(CURRENT_DATE) AND dietGuest.guest.id = :guestId")
+    Double getCaloriesSumForCurrentWeek(Integer guestId);
+
+    @Query("SELECT SUM(food.calorie) FROM Diet diet " +
+            "INNER JOIN Food food ON diet.food.id = food.id " +
+            "INNER JOIN DietGuest dietGuest ON diet.id = dietGuest.diet.id " +
+            "WHERE MONTH(diet.date) = MONTH(CURRENT_DATE) AND dietGuest.guest.id = :guestId")
+    Double getCaloriesSumForCurrentMonth(Integer guestId);
 }

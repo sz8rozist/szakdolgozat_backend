@@ -1,6 +1,7 @@
 package com.example.fitness.controller;
 
 import com.example.fitness.model.Diet;
+import com.example.fitness.model.dto.CaloriesSumDto;
 import com.example.fitness.model.dto.DietSummaryDto;
 import com.example.fitness.model.request.DietRequest;
 import com.example.fitness.model.request.DietUpdateRequest;
@@ -55,6 +56,11 @@ public class DietController {
 
     @GetMapping("/macronutriense/{guestUserId}")
     public List<DietSummaryDto> getMacronutrienseStatistics(@PathVariable Integer guestUserId){
-        return this.dietService.getMacronutrienseStatisztics(guestUserId);
+        return dietService.getMacronutrienseStatisztics(guestUserId);
+    }
+
+    @GetMapping("/caloriesSum/{userId}")
+    public CaloriesSumDto getCalories(@PathVariable Integer userId){
+        return dietService.getCalores(userId);
     }
  }

@@ -4,6 +4,7 @@ import com.example.fitness.exception.DietNotFouncException;
 import com.example.fitness.exception.FoodNotFoundException;
 import com.example.fitness.exception.GuestNotFoundException;
 import com.example.fitness.model.*;
+import com.example.fitness.model.dto.CaloriesSumDto;
 import com.example.fitness.model.dto.DietDto;
 import com.example.fitness.model.dto.DietSummaryDto;
 import com.example.fitness.model.request.DietRequest;
@@ -70,7 +71,9 @@ public class DietService {
             if(dg.getDiet().getDate().equals(dietDate)){
                 DietDto dietDto = new DietDto();
                 dietDto.setDietId(dg.getDiet().getId());
-                dietDto.setTrainerId(dg.getTrainer().getId());
+                if(dg.getTrainer() != null){
+                    dietDto.setTrainerId(dg.getTrainer().getId());
+                }
                 dietDto.setFat(dg.getDiet().getFood().getFat());
                 dietDto.setCalorie(dg.getDiet().getFood().getCalorie());
                 dietDto.setCarbonhydrate(dg.getDiet().getFood().getCarbonhydrate());
@@ -145,5 +148,13 @@ public class DietService {
     public List<DietSummaryDto> getMacronutrienseStatisztics(Integer guestUserId) {
         Guest guest = guestRepository.findByUserId(guestUserId).orElseThrow(() -> new GuestNotFoundException("Vendég nem található: "+ guestUserId));
         return dietRepository.getDietSummary(guest.getId());
+    }
+
+    public CaloriesSumDto getCalores(Integer userId) {
+        Guest guest = guestRepository.findByUserId(userId).orElseThrow(() -> new GuestNotFoundException("Vendég nem található: "+ userId));
+        Double caloriesByDate = dietRepository.getCaloriesSumByDate(guest.getId());
+        Double caloriesByWeek = dietRepository.getCaloriesSumForCurrentWeek(guest.getId());
+        Double caloriesByMonth = dietRepository.getCaloriesSumForCurrentMonth(guest.getId());
+        return new CaloriesSumDto(caloriesByDate, caloriesByWeek, caloriesByMonth);
     }
 }
