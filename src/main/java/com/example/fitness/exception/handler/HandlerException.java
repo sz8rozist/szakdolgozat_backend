@@ -83,6 +83,10 @@ public class HandlerException {
     public ResponseEntity<Object> handleMessageNotFoundException(MessageNotFoundException exception){
         return buildResponseEntity(new Error(HttpStatus.NOT_FOUND, exception.getMessage()));
     }
+    @ExceptionHandler({NotificationNotFoundException.class})
+    public ResponseEntity<Object> handleNotificationNotFoundException(NotificationNotFoundException exception){
+        return buildResponseEntity(new Error(HttpStatus.NOT_FOUND, exception.getMessage()));
+    }
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {

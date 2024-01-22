@@ -1,7 +1,11 @@
 package com.example.fitness.controller;
 
+import com.example.fitness.model.Notification;
 import com.example.fitness.model.dto.NotificationDto;
 import com.example.fitness.service.NotificationService;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,9 +19,23 @@ public class NotificationController {
     public NotificationController(NotificationService notificationService) {
         this.notificationService = notificationService;
     }
-@GetMapping("/{trainerId}")
-    public List<NotificationDto> getLastFiveDietNotificationForTrainer(@PathVariable Integer trainerId){
-        return notificationService.getLastFiveDietNotificationForTrainer(trainerId);
+    @GetMapping("/{userId}")
+    public List<NotificationDto> getAll(@PathVariable Integer userId){
+        return notificationService.getAllNotification(userId);
     }
-
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Integer id){
+        notificationService.delete(id);
+    }
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void markAsViewed(@PathVariable Integer id){
+        notificationService.markAsViewed(id);
+    }
+    @PutMapping("/all/{userId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void markAllAsViewed(@PathVariable Integer userId){
+        notificationService.markAllAsViewed(userId);
+    }
 }
