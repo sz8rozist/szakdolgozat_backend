@@ -15,7 +15,7 @@ public class DietSummaryDto {
     private Double totalCarbonhydrate;
     private Double totalCalorie;
     private Double totalFat;
-    private LocalDate date;
+    private String day;
     private Integer guestId;
     private FoodType foodType;
 

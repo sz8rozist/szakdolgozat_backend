@@ -20,12 +20,13 @@ public interface DietRepository extends JpaRepository<Diet, Integer> {
             "SUM(d.food.carbonhydrate), " +
             "SUM(d.food.calorie), " +
             "SUM(d.food.fat), " +
-            "d.date, " +
-            "dg.guest.id, d.type) " +
+            "DAYNAME(d.date), " +
+            "dg.guest.id, " +
+            "d.type) " +
             "FROM Diet d " +
             "INNER JOIN DietGuest dg ON d.id = dg.diet.id " +
-            "WHERE dg.guest.id = :guestId AND DAY(d.date) = DAY(CURRENT_DATE) " +
-            "GROUP BY d.date, d.type")
+            "WHERE dg.guest.id = :guestId AND WEEK(d.date) = WEEK(CURRENT_DATE) " +
+            "GROUP BY d.date")
     List<DietSummaryDto> getDietSummary(Integer guestId);
 
     @Query("SELECT SUM(food.calorie) FROM Diet diet " +
