@@ -2,10 +2,7 @@ package com.example.fitness.config;
 
 import com.example.fitness.exception.*;
 import com.example.fitness.model.*;
-import com.example.fitness.model.dto.MessageDto;
-import com.example.fitness.model.dto.NotificationDto;
-import com.example.fitness.model.dto.TrainerDietNotificationRequestDto;
-import com.example.fitness.model.dto.TrainerWorkoutNotificationDto;
+import com.example.fitness.model.dto.*;
 import com.example.fitness.repository.*;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -112,6 +109,22 @@ public class WebSocketController {
         notificationRepository.save(notification);
         NotificationDto notificationDto = getNotificationDto(notification, guest, trainer);
         messagingTemplate.convertAndSend("/queue/trainerWorkoutNotification/" + trainer.getUser().getId(), notificationDto);
+    }
+
+    @MessageMapping("/guest.feedback/{notificationId}")
+    public void sendFeedbackToGuest(@DestinationVariable Integer notificationId, @Payload GuestFeedbackDto guestFeedbackDto){
+        Notification notification = notificationRepository.findById(notificationId).orElseThrow(() -> new NotificationNotFoundException("Nem található értesítés"));
+        Guest guest = guestRepository.findById(notification.getGuest().getId()).orElseThrow(()-> new GuestNotFoundException("Nem található vendég"));
+        Trainer trainer = trainerRepository.findById(notification.getTrainer().getId()).orElseThrow(() -> new TrainerNotFoundException("Nem található edző"));
+        Notification notification1 = new Notification();
+        notification1.setMessage(guestFeedbackDto.getFeedback());
+        notification1.setGuest(guest);
+        notification1.setTrainer(trainer);
+        notification1.setType(NotificationType.FEEDBACK);
+        notificationRepository.save(notification1);
+        NotificationDto notificationDto = getNotificationDto(notification1, guest, trainer);
+        messagingTemplate.convertAndSend("/queue/guestFeedback/" + notification.getGuest().getId(), notificationDto);
+
     }
 
 }
