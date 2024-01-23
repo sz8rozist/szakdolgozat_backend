@@ -5,6 +5,7 @@ import com.example.fitness.model.*;
 import com.example.fitness.model.dto.MessageDto;
 import com.example.fitness.model.dto.NotificationDto;
 import com.example.fitness.model.dto.TrainerDietNotificationRequestDto;
+import com.example.fitness.model.dto.TrainerWorkoutNotificationDto;
 import com.example.fitness.repository.*;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -23,8 +24,10 @@ public class WebSocketController {
     private final SimpMessagingTemplate messagingTemplate;
     private final FoodRepository foodRepository;
     private final DietRepository dietRepository;
+    private final ExerciseRepository exerciseRepository;
+    private final WorkoutRepository workoutRepository;
 
-    public WebSocketController(MessageRepository messageRepository, UserRepository userRepository, GuestRepository guestRepository, TrainerRepository trainerRepository, NotificationRepository notificationRepository, SimpMessagingTemplate messagingTemplate, FoodRepository foodRepository, DietRepository dietRepository) {
+    public WebSocketController(MessageRepository messageRepository, UserRepository userRepository, GuestRepository guestRepository, TrainerRepository trainerRepository, NotificationRepository notificationRepository, SimpMessagingTemplate messagingTemplate, FoodRepository foodRepository, DietRepository dietRepository, ExerciseRepository exerciseRepository, WorkoutRepository workoutRepository) {
         this.messageRepository = messageRepository;
         this.userRepository = userRepository;
         this.guestRepository = guestRepository;
@@ -33,6 +36,8 @@ public class WebSocketController {
         this.messagingTemplate = messagingTemplate;
         this.foodRepository = foodRepository;
         this.dietRepository = dietRepository;
+        this.exerciseRepository = exerciseRepository;
+        this.workoutRepository = workoutRepository;
     }
 
     @MessageMapping("/chat.sendPrivateMessage/{receiverId}")
@@ -60,23 +65,10 @@ public class WebSocketController {
     }
     @MessageMapping("/trainer.diet/{trainerId}")
     public void sendNotificationToTrainer(@DestinationVariable Integer trainerId, @Payload TrainerDietNotificationRequestDto trainerDietNotificationDto){
-        Guest guest = guestRepository.findById(trainerDietNotificationDto.getGuestId()).orElse(null);
-        Trainer trainer = trainerRepository.findById(trainerId).orElse(null);
-        Food food = foodRepository.findById(trainerDietNotificationDto.getFoodId()).orElse(null);
-        Diet diet = dietRepository.findById(trainerDietNotificationDto.getDietId()).orElse(null);
-        if(diet == null){
-            throw new DietNotFouncException("Az étrend nem található!");
-        }
-        if(food == null){
-            throw new FoodNotFoundException("Az étel nem található!");
-        }
-        if(guest == null){
-            throw new GuestNotFoundException("Nem található vendég!");
-        }
-        if(trainer == null){
-            throw new TrainerNotFoundException("Nem található edző!");
-        }
-        // ITT még az ételnél az eated mezőt truera kell rakni
+        Guest guest = guestRepository.findById(trainerDietNotificationDto.getGuestId()).orElseThrow(()-> new GuestNotFoundException("Nem található vendég"));
+        Trainer trainer = trainerRepository.findById(trainerId).orElseThrow(() -> new TrainerNotFoundException("Nem található edző"));
+        Food food = foodRepository.findById(trainerDietNotificationDto.getFoodId()).orElseThrow(() -> new FoodNotFoundException("Nem található étel"));
+        Diet diet = dietRepository.findById(trainerDietNotificationDto.getDietId()).orElseThrow(() -> new DietNotFouncException("Nem található étrend"));
         Notification notification = new Notification();
         notification.setMessage(guest.getFirst_name() + " " + guest.getLast_name() + " elfogyasztotta a " + food.getName() + " ételt.");
         notification.setGuest(guest);
@@ -102,4 +94,24 @@ public class WebSocketController {
         notificationDto.setTrainerLastName(trainer.getLast_name());
         return notificationDto;
     }
+
+    @MessageMapping("/trainer.workout/{trainerId}")
+    public void sendWorkoutNotificationToTrainer(@DestinationVariable Integer trainerId, @Payload TrainerWorkoutNotificationDto trainerWorkoutNotificationDto){
+        Guest guest = guestRepository.findById(trainerWorkoutNotificationDto.getGuestId()).orElseThrow(()-> new GuestNotFoundException("Nem található vendég"));
+        Trainer trainer = trainerRepository.findById(trainerId).orElseThrow(() -> new TrainerNotFoundException("Nem található edző"));
+        Exercise exercise = exerciseRepository.findById(trainerWorkoutNotificationDto.getExerciseId()).orElseThrow(() -> new ExerciseNotFoundException("Nem található gyakorlat"));
+        Workout workout = workoutRepository.findById(trainerWorkoutNotificationDto.getWorkoutId()).orElseThrow(() -> new WorkoutNotFoundException("Nem található edzésterv"));
+
+        Notification notification = new Notification();
+        notification.setMessage(guest.getFirst_name() + " " + guest.getLast_name() + " elvégezte a " + exercise.getName() + " gyakorlatot.");
+        notification.setGuest(guest);
+        notification.setTrainer(trainer);
+        notification.setType(NotificationType.EXERCISE);
+        workout.setDone(true);
+        workoutRepository.save(workout);
+        notificationRepository.save(notification);
+        NotificationDto notificationDto = getNotificationDto(notification, guest, trainer);
+        messagingTemplate.convertAndSend("/queue/trainerWorkoutNotification/" + trainer.getUser().getId(), notificationDto);
+    }
+
 }

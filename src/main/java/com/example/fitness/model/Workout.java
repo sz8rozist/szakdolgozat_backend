@@ -26,7 +26,8 @@ public class Workout {
     @ManyToOne
     @JoinColumn(name="exercise_id")
     private Exercise exercise;
-
+    @Column(name = "done", columnDefinition = "TINYINT DEFAULT 0")
+    private boolean done;
     @OneToMany(mappedBy = "workout")
     @JsonIgnore
     Set<WorkoutGuest> workoutGuests;

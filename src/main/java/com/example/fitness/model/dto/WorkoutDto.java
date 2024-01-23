@@ -18,4 +18,5 @@ public class WorkoutDto {
     private Integer sets;
     private Integer repetitions;
     private Trainer trainer;
+    private boolean done;
 }
