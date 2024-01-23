@@ -4,12 +4,9 @@ import com.example.fitness.exception.DietNotFouncException;
 import com.example.fitness.exception.FoodNotFoundException;
 import com.example.fitness.exception.GuestNotFoundException;
 import com.example.fitness.model.*;
-import com.example.fitness.model.dto.CaloriesSumDto;
-import com.example.fitness.model.dto.DietDto;
-import com.example.fitness.model.dto.DietSummaryDto;
+import com.example.fitness.model.dto.*;
 import com.example.fitness.model.request.DietRequest;
 import com.example.fitness.model.request.DietUpdateRequest;
-import com.example.fitness.model.dto.DietGuestDto;
 import com.example.fitness.repository.*;
 import org.springframework.stereotype.Service;
 
@@ -156,5 +153,10 @@ public class DietService {
         Double caloriesByWeek = dietRepository.getCaloriesSumForCurrentWeek(guest.getId());
         Double caloriesByMonth = dietRepository.getCaloriesSumForCurrentMonth(guest.getId());
         return new CaloriesSumDto(caloriesByDate, caloriesByWeek, caloriesByMonth);
+    }
+
+    public List<MealFrequencyDto> getMealFrequency(Integer userId) {
+        Guest guest = guestRepository.findByUserId(userId).orElseThrow(() -> new GuestNotFoundException("Vendég nem található: "+ userId));
+        return dietRepository.getMealFrequency(guest.getId());
     }
 }

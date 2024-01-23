@@ -3,6 +3,7 @@ package com.example.fitness.config;
 import com.example.fitness.exception.*;
 import com.example.fitness.model.*;
 import com.example.fitness.model.dto.MessageDto;
+import com.example.fitness.model.dto.NotificationDto;
 import com.example.fitness.model.dto.TrainerDietNotificationRequestDto;
 import com.example.fitness.repository.*;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -84,7 +85,21 @@ public class WebSocketController {
         diet.setEated(true);
         dietRepository.save(diet);
         notificationRepository.save(notification);
-        messagingTemplate.convertAndSend("/queue/trainerNotification/" + trainer.getUser().getId(), notification);
+        NotificationDto notificationDto = getNotificationDto(notification, guest, trainer);
+        messagingTemplate.convertAndSend("/queue/trainerNotification/" + trainer.getUser().getId(), notificationDto);
+    }
 
+    private static NotificationDto getNotificationDto(Notification notification, Guest guest, Trainer trainer) {
+        NotificationDto notificationDto = new NotificationDto();
+        notificationDto.setNotificationId(notification.getId());
+        notificationDto.setDate(notification.getDate());
+        notificationDto.setViewed(notification.isViewed());
+        notificationDto.setMessage(notification.getMessage());
+        notificationDto.setType(notification.getType());
+        notificationDto.setGuestFirstName(guest.getFirst_name());
+        notificationDto.setGuestLastName(guest.getLast_name());
+        notificationDto.setTrainerFirstName(trainer.getFirst_name());
+        notificationDto.setTrainerLastName(trainer.getLast_name());
+        return notificationDto;
     }
 }
