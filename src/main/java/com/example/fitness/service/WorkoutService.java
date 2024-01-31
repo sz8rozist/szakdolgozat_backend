@@ -2,6 +2,8 @@ package com.example.fitness.service;
 
 import com.example.fitness.exception.*;
 import com.example.fitness.model.*;
+import com.example.fitness.model.dto.ExerciseRegularityDto;
+import com.example.fitness.model.dto.RecentlyUsedExerciseDto;
 import com.example.fitness.model.dto.WorkoutDto;
 import com.example.fitness.model.request.WorkoutRequest;
 import com.example.fitness.model.request.WorkoutUpdateRequest;
@@ -152,5 +154,15 @@ public class WorkoutService {
     private void saveWorkoutsAndWorkoutGuests(List<Workout> workouts, List<WorkoutGuest> workoutGuests) {
         workoutRepository.saveAll(workouts);
         workoutGuestRepository.saveAll(workoutGuests);
+    }
+
+    public List<RecentlyUsedExerciseDto> getRecentlyUsedExercise(Integer userID) {
+        Guest guest = guestRepository.findByUserId(userID).orElseThrow(()-> new GuestNotFoundException("Nem található vendég"));
+        return workoutRepository.findRecentlyUsedExercise(guest.getId());
+    }
+
+    public List<ExerciseRegularityDto> getExerciseRegularity(Integer userId) {
+        Guest guest = guestRepository.findByUserId(userId).orElseThrow(()-> new GuestNotFoundException("Nem található vendég"));
+        return workoutRepository.findExerciseRegularity(guest.getId());
     }
 }

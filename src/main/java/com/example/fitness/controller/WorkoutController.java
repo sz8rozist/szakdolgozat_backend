@@ -1,6 +1,8 @@
 package com.example.fitness.controller;
 
 import com.example.fitness.model.Workout;
+import com.example.fitness.model.dto.ExerciseRegularityDto;
+import com.example.fitness.model.dto.RecentlyUsedExerciseDto;
 import com.example.fitness.model.dto.WorkoutDto;
 import com.example.fitness.model.request.DietUpdateRequest;
 import com.example.fitness.model.request.WorkoutRequest;
@@ -51,5 +53,13 @@ public class WorkoutController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteWorkout(@PathVariable Integer guestId, @PathVariable LocalDate date){
         workoutService.deleteWorkout(guestId, date);
+    }
+    @GetMapping("/recentlyUsedExercise/{userId}")
+    public List<RecentlyUsedExerciseDto> getRecentlyUsedExercise(@PathVariable Integer userId){
+        return workoutService.getRecentlyUsedExercise(userId);
+    }
+    @GetMapping("/exerciseRegularity/{userId}")
+    public List<ExerciseRegularityDto> getExerciseRegularity(@PathVariable Integer userId){
+        return workoutService.getExerciseRegularity(userId);
     }
 }
