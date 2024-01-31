@@ -50,6 +50,5 @@ public class Guest{
     @JsonIgnore
     Set<WorkoutGuest> workoutGuests;
     @OneToMany(mappedBy = "guest")
-    @JsonIgnore
     Set<DietRecommedation> dietRecommedations;
 }

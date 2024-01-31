@@ -62,4 +62,8 @@ public class WorkoutController {
     public List<ExerciseRegularityDto> getExerciseRegularity(@PathVariable Integer userId){
         return workoutService.getExerciseRegularity(userId);
     }
+    @GetMapping("/trainerWorkoutPlanCount/{trainerId}")
+    public Integer getTrainerWorkoutPlanCount(@PathVariable Integer trainerId){
+        return workoutService.getTrainerWorkoutPlanCount(trainerId);
+    }
 }

@@ -165,4 +165,8 @@ public class WorkoutService {
         Guest guest = guestRepository.findByUserId(userId).orElseThrow(()-> new GuestNotFoundException("Nem található vendég"));
         return workoutRepository.findExerciseRegularity(guest.getId());
     }
+
+    public Integer getTrainerWorkoutPlanCount(Integer trainerId) {
+        return workoutGuestRepository.countTrainerWorkoutPlan(trainerId);
+    }
 }
