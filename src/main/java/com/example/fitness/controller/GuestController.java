@@ -34,4 +34,9 @@ public class GuestController {
     public Guest addTrainerToGuest(@RequestParam("trainerId") Integer trainerId, @RequestParam("guestId") Integer guestId){
         return guestService.addTrainerToGuest(trainerId, guestId);
     }
+
+    @GetMapping("/guestById/{guestId}")
+    public Guest getGuestById(@PathVariable int guestId){
+        return guestService.getById(guestId);
+    }
 }

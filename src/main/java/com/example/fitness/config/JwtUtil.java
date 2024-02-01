@@ -4,6 +4,7 @@ import com.example.fitness.model.User;
 import com.example.fitness.repository.UserRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import org.apache.catalina.Globals;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,7 +30,7 @@ public class JwtUtil {
 
     public JwtUtil(UserRepository userRepository){
         this.userRepository = userRepository;
-        this.secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+        this.secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
         this.jwtParser = Jwts.parser().setSigningKey(this.secretKey);
     }
     public String createToken(String username) {

@@ -6,6 +6,8 @@ import com.example.fitness.exception.TrainerNotFoundException;
 import com.example.fitness.model.DietRecommedation;
 import com.example.fitness.model.Guest;
 import com.example.fitness.model.Trainer;
+import com.example.fitness.model.dto.NutritionDto;
+import com.example.fitness.model.request.NutritionRequest;
 import com.example.fitness.repository.DietRecommendationRepository;
 import com.example.fitness.repository.GuestRepository;
 import com.example.fitness.repository.TrainerRepository;
@@ -67,5 +69,36 @@ public class DietRecommendationService {
 
     public DietRecommedation getById(int id) {
         return dietRecommendationRepository.findById(id).orElseThrow(()-> new DietRecommendationNotFoundException("Nem található étrend ajánlás."));
+    }
+
+    public NutritionDto nutiritonCalculate(NutritionRequest nutritionRequest) {
+        Guest guest = guestRepository.findById(nutritionRequest.getGuestId()).orElseThrow(() -> new GuestNotFoundException("Nem található vendég"));
+        double basalMetabolicRate = calculateBMR(guest.getAge(), nutritionRequest.getBodyWeight(), guest.isGender(), guest.getHeight());
+        // Az átlagértékek számítása a BMR és más tényezők alapján
+        double proteinPercentage = (double) nutritionRequest.getProteinSzazalek() / 100;
+        double carbohydratePercentage = (double) nutritionRequest.getChSzazalek() / 100;
+        double fatPercentage = (double) nutritionRequest.getFatSzazalek() / 100;
+
+        double protein = basalMetabolicRate * proteinPercentage / 4.0;
+        double carbohydrates = basalMetabolicRate * carbohydratePercentage / 4.0;
+        double fat = basalMetabolicRate * fatPercentage / 9.0;
+
+        NutritionDto result = new NutritionDto();
+        result.setProtein((int)Math.round(protein));
+        result.setCalories((int)Math.round(basalMetabolicRate));
+        result.setCarbohydrates((int)Math.round(carbohydrates));
+        result.setFat((int)Math.round(fat));
+        return result;
+    }
+
+    private double calculateBMR(int age, double weight, boolean gender, double height) {
+        // Mifflin-St Jeor képlet alapanyagcsere kalkuláció képlete
+        if(gender){
+            //Férfi
+            return 10 * weight + 6.25 * height - 5 * age + 5;
+        }else{
+            //Nő
+            return 10 * weight + 6.25 * height - 5 * age - 161;
+        }
     }
 }

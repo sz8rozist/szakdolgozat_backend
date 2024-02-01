@@ -1,5 +1,9 @@
 package com.example.fitness.config;
 
+import com.example.fitness.exception.UserNotFoundException;
+import com.example.fitness.model.User;
+import com.example.fitness.repository.UserRepository;
+import com.example.fitness.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
@@ -24,11 +28,13 @@ public class JwtFilter extends OncePerRequestFilter {
     private final JwtUtil jwtUtil;
     private final ObjectMapper mapper;
     private final CustomUserDetailsService userDetailsService;
+    private final UserRepository userRepository;
 
-    public JwtFilter(JwtUtil jwtUtil, ObjectMapper mapper, CustomUserDetailsService userDetailsService) {
+    public JwtFilter(JwtUtil jwtUtil, ObjectMapper mapper, CustomUserDetailsService userDetailsService, UserRepository userRepository) {
         this.jwtUtil = jwtUtil;
         this.mapper = mapper;
         this.userDetailsService = userDetailsService;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -38,9 +44,10 @@ public class JwtFilter extends OncePerRequestFilter {
             if (accessToken != null) {
                 Claims claims = jwtUtil.resolveClaims(request);
                 if (claims != null && jwtUtil.validateClaims(claims)) {
-                    String username = claims.getSubject();
-                    UserDetails user = userDetailsService.loadUserByUsername(username);
-                    Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                    String userId = claims.getSubject();
+                    User user = userRepository.findById(Integer.valueOf(userId)).orElseThrow(() -> new UserNotFoundException("Nem található felhasználó!"));
+                    UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
+                    Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             }

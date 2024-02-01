@@ -3,6 +3,8 @@ package com.example.fitness.controller;
 import com.example.fitness.exception.DietRecommendationNotFoundException;
 import com.example.fitness.model.DietRecommedation;
 import com.example.fitness.model.Food;
+import com.example.fitness.model.dto.NutritionDto;
+import com.example.fitness.model.request.NutritionRequest;
 import com.example.fitness.service.DietRecommendationService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -48,5 +50,10 @@ public class DietRecommendationController {
     @GetMapping("/get/{id}")
     public DietRecommedation getById(@PathVariable int id){
         return  dietRecommendationService.getById(id);
+    }
+
+    @PostMapping("/nutritionCalculate")
+    public NutritionDto nutritionCalculate(@RequestBody NutritionRequest nutritionRequest){
+        return dietRecommendationService.nutiritonCalculate(nutritionRequest);
     }
 }

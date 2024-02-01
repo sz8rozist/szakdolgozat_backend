@@ -20,6 +20,7 @@ public class DietRecommedation {
     private float protein;
     private float carbonhydrate;
     private float fat;
+    private float bodyWeight;
     @ManyToOne
     @JsonIgnore
     private Guest guest;

@@ -39,6 +39,10 @@ public class Guest{
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(name = "gender", columnDefinition = "TINYINT DEFAULT 0")
+    //0 - nő, 1 - férfi
+    private boolean gender;
+
     @ManyToOne
     private Trainer trainer;
 

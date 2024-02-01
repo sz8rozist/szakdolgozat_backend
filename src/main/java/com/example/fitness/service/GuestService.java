@@ -39,4 +39,8 @@ public class GuestService {
         guest.setTrainer(trainer);
        return guestRepository.save(guest);
     }
+
+    public Guest getById(int guestId) {
+        return guestRepository.findById(guestId).orElseThrow(()-> new GuestNotFoundException("Nem található vendég"));
+    }
 }

@@ -83,6 +83,7 @@ public class UserService {
             guest.setEmail(request.getEmail());
             guest.setFirst_name(request.getFirstName());
             guest.setLast_name(request.getLastName());
+            guest.setGender(request.getGender().equals("1"));
             guestRepository.save(guest);
             role.setRole(RoleEnumType.GUEST);
         }else{

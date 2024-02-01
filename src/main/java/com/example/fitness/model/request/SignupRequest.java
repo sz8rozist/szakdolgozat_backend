@@ -23,4 +23,6 @@ public class SignupRequest {
     @NotEmpty(message = "Jogosultság megadása kötelező.")
     @Pattern(regexp = "^(GUEST|TRAINER|ADMIN)$", message = "Érvénytelen jogosultság. Csak GUEST vagy TRAINER megengedett.")
     private String role;
+    @NotEmpty(message = "Nem megadása kötelező.")
+    private String gender;
 }
