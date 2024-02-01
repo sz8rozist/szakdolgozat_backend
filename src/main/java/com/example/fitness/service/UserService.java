@@ -177,6 +177,7 @@ public class UserService {
             guest.setAge(updateProfileRequest.getAge());
             guest.setWeight(updateProfileRequest.getWeight());
             guest.setHeight(updateProfileRequest.getHeight());
+            guest.setGender(updateProfileRequest.getGender().equals("1"));
         });
         user.getTrainer().ifPresent(trainer ->{
             trainer.setLast_name(updateProfileRequest.getLastName());

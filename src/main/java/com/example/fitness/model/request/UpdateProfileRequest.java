@@ -21,4 +21,5 @@ public class UpdateProfileRequest {
     private float weight;
     private float height;
     private String type;
+    private String gender;
 }
