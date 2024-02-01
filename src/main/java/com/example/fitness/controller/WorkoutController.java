@@ -36,9 +36,9 @@ public class WorkoutController {
     public void saveByTrainer(@PathVariable Integer userId, @PathVariable Integer guestId, @PathVariable LocalDate date, @RequestBody List<WorkoutRequest> workoutRequest){
         workoutService.saveByTrainer(userId, guestId, date, workoutRequest);
     }
-    @GetMapping("/{userId}/{date}")
-    public List<WorkoutDto> getWorkouts(@PathVariable Integer userId, @PathVariable LocalDate date){
-        return workoutService.getWorkoutByDateAndUserId(userId, date);
+    @GetMapping("/{guestId}/{date}")
+    public List<WorkoutDto> getWorkouts(@PathVariable Integer guestId, @PathVariable LocalDate date){
+        return workoutService.getWorkoutByDateAndUserId(guestId, date);
     }
     @GetMapping("/{id}")
     public Workout getWorkoutById(@PathVariable Integer id){

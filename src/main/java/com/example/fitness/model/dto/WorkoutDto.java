@@ -17,6 +17,6 @@ public class WorkoutDto {
     private LocalDate date;
     private Integer sets;
     private Integer repetitions;
-    private Trainer trainer;
+    private Integer trainer;
     private boolean done;
 }

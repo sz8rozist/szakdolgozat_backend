@@ -15,7 +15,7 @@ import java.util.List;
 
 @Repository
 public interface WorkoutRepository extends JpaRepository<Workout, Integer> {
-    @Query("SELECT new com.example.fitness.model.dto.WorkoutDto(w.id, w.exercise, w.date, w.sets, w.repetitions, wg.trainer, w.done)  FROM Workout w JOIN w.workoutGuests wg WHERE wg.guest.id = :guestId AND w.date = :date")
+    @Query("SELECT new com.example.fitness.model.dto.WorkoutDto(w.id, w.exercise, w.date, w.sets, w.repetitions, wg.trainer.id, w.done)  FROM Workout w JOIN w.workoutGuests wg WHERE wg.guest.id = :guestId AND w.date = :date ")
     List<WorkoutDto> findWorkoutsByGuestIdAndWorkoutDate(@Param("guestId") int guestId, @Param("date") LocalDate date);
 
     //Legtöbbet használt gyakorlatok

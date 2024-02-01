@@ -54,10 +54,10 @@ public class WorkoutService {
         saveWorkoutsAndWorkoutGuests(workouts, workoutGuests);
     }
 
-    public List<WorkoutDto> getWorkoutByDateAndUserId(Integer userId, LocalDate date){
-        Guest guest = guestRepository.findByUserId(userId).orElse(null);
+    public List<WorkoutDto> getWorkoutByDateAndUserId(Integer guestId, LocalDate date){
+        Guest guest = guestRepository.findById(guestId).orElse(null);
         if(guest == null){
-            throw new GuestNotFoundException("Nem található vendég ezzel a user azonosítóval: " + userId);
+            throw new GuestNotFoundException("Nem található vendég ezzel az azonosítóval: " + guestId);
         }
         return workoutRepository.findWorkoutsByGuestIdAndWorkoutDate(guest.getId(), date);
     }
