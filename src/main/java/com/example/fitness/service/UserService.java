@@ -16,7 +16,6 @@ import com.example.fitness.repository.GuestRepository;
 import com.example.fitness.repository.MessageRepository;
 import com.example.fitness.repository.TrainerRepository;
 import com.example.fitness.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -40,20 +39,23 @@ import java.util.UUID;
 
 @Service
 public class UserService {
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private TrainerRepository trainerRepository;
-    @Autowired
-    private GuestRepository guestRepository;
-    @Autowired
-    private JwtUtil jwtUtil;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private MessageRepository messageRepository;
+    private final AuthenticationManager authenticationManager;
+    private final UserRepository userRepository;
+    private final TrainerRepository trainerRepository;
+    private final GuestRepository guestRepository;
+    private final JwtUtil jwtUtil;
+    private final PasswordEncoder passwordEncoder;
+    private final MessageRepository messageRepository;
+
+    public UserService(AuthenticationManager authenticationManager, UserRepository userRepository, TrainerRepository trainerRepository, GuestRepository guestRepository, JwtUtil jwtUtil, PasswordEncoder passwordEncoder, MessageRepository messageRepository) {
+        this.authenticationManager = authenticationManager;
+        this.userRepository = userRepository;
+        this.trainerRepository = trainerRepository;
+        this.guestRepository = guestRepository;
+        this.jwtUtil = jwtUtil;
+        this.passwordEncoder = passwordEncoder;
+        this.messageRepository = messageRepository;
+    }
 
     public LoginDto authenticate(LoginRequest authRequest) throws InvalidUsernameOrPasswordException{
         try {
