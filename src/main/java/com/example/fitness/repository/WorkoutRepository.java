@@ -25,5 +25,6 @@ public interface WorkoutRepository extends JpaRepository<Workout, Integer> {
     //Havi edzés rendszeresség
     @Query("SELECT new com.example.fitness.model.dto.ExerciseRegularityDto(MONTHNAME(w.date), COUNT(w.id)) FROM Workout w INNER JOIN w.workoutGuests wg WHERE wg.guest.id = :guestId GROUP BY MONTH(w.date) ORDER BY COUNT(w.id)")
     List<ExerciseRegularityDto> findExerciseRegularity(@Param("guestId") int guestId);
-
+    @Query("SELECT w FROM Workout w JOIN w.workoutGuests wg WHERE wg.guest.id = :guestId GROUP BY w.date")
+    List<Workout> getAllWorkoutByGuest(@Param("guestId") Integer guestId);
 }

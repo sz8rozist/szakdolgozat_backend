@@ -49,4 +49,7 @@ public interface DietRepository extends JpaRepository<Diet, Integer> {
     Double getCaloriesSumForCurrentMonth(Integer guestId);
     @Query("SELECT new com.example.fitness.model.dto.MealFrequencyDto(f.name, COUNT(*)) FROM Food f JOIN f.diets fd JOIN fd.dietGuests fdg WHERE fdg.guest.id = :guestId GROUP BY f.name ORDER BY COUNT(*) DESC LIMIT 5")
     List<MealFrequencyDto> getMealFrequency(@Param("guestId") Integer guestId);
+
+    @Query("SELECT d FROM Diet d JOIN d.dietGuests dg WHERE dg.guest.id = :guestId GROUP BY d.date")
+    List<Diet> getAllDietByGuestId(@Param("guestId") Integer guestId);
 }

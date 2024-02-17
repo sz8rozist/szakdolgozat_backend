@@ -1,12 +1,9 @@
 package com.example.fitness.controller;
 
 import com.example.fitness.model.Diet;
-import com.example.fitness.model.dto.CaloriesSumDto;
-import com.example.fitness.model.dto.DietSummaryDto;
-import com.example.fitness.model.dto.MealFrequencyDto;
+import com.example.fitness.model.dto.*;
 import com.example.fitness.model.request.DietRequest;
 import com.example.fitness.model.request.DietUpdateRequest;
-import com.example.fitness.model.dto.DietGuestDto;
 import com.example.fitness.service.DietService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -61,12 +58,17 @@ public class DietController {
     }
 
     @GetMapping("/caloriesSum/{userId}")
-    public CaloriesSumDto getCalories(@PathVariable Integer userId){
+    public CaloriesSumDto getCalories(@PathVariable int userId){
         return dietService.getCalores(userId);
     }
 
     @GetMapping("/mealFrequency/{userId}")
-    public List<MealFrequencyDto> getMealFrequency(@PathVariable Integer userId){
+    public List<MealFrequencyDto> getMealFrequency(@PathVariable int userId){
         return dietService.getMealFrequency(userId);
+    }
+
+    @GetMapping("/getAllDietByGuestId/{guestId}")
+    public List<CalendarEventDto> getALlDietByGuest(@PathVariable int guestId){
+        return dietService.getAllDietByGuestId(guestId);
     }
  }

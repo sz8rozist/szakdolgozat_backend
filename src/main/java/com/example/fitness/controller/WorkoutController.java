@@ -1,6 +1,7 @@
 package com.example.fitness.controller;
 
 import com.example.fitness.model.Workout;
+import com.example.fitness.model.dto.CalendarEventDto;
 import com.example.fitness.model.dto.ExerciseRegularityDto;
 import com.example.fitness.model.dto.RecentlyUsedExerciseDto;
 import com.example.fitness.model.dto.WorkoutDto;
@@ -65,5 +66,10 @@ public class WorkoutController {
     @GetMapping("/trainerWorkoutPlanCount/{trainerId}")
     public Integer getTrainerWorkoutPlanCount(@PathVariable Integer trainerId){
         return workoutService.getTrainerWorkoutPlanCount(trainerId);
+    }
+
+    @GetMapping("/getAllWorkoutByGuestId/{guestId}")
+    public List<CalendarEventDto> getAllWorkoutByGuest(@PathVariable int guestId){
+        return workoutService.getAllWorkoutByGuestId(guestId);
     }
 }

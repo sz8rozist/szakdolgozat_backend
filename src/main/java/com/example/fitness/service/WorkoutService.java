@@ -2,6 +2,7 @@ package com.example.fitness.service;
 
 import com.example.fitness.exception.*;
 import com.example.fitness.model.*;
+import com.example.fitness.model.dto.CalendarEventDto;
 import com.example.fitness.model.dto.ExerciseRegularityDto;
 import com.example.fitness.model.dto.RecentlyUsedExerciseDto;
 import com.example.fitness.model.dto.WorkoutDto;
@@ -168,5 +169,15 @@ public class WorkoutService {
 
     public Integer getTrainerWorkoutPlanCount(Integer trainerId) {
         return workoutGuestRepository.countTrainerWorkoutPlan(trainerId);
+    }
+
+    public List<CalendarEventDto> getAllWorkoutByGuestId(int guestId){
+        List<CalendarEventDto> calendarEventDtos = new ArrayList<>();
+        List<Workout> workout = workoutRepository.getAllWorkoutByGuest(guestId);
+        for(Workout w : workout){
+            CalendarEventDto dto = new CalendarEventDto("Edzés", w.getDate(), "#65b741");
+            calendarEventDtos.add(dto);
+        }
+        return calendarEventDtos;
     }
 }

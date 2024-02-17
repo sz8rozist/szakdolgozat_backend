@@ -88,10 +88,10 @@ public class DietService {
         int carbonhydrateSum= 0;
         int fatSum = 0;
         for(DietDto d: diets){
-            calorieSum += d.getCalorie();
-            proteinSum +=  d.getProtein();
-            carbonhydrateSum += d.getCarbonhydrate();
-            fatSum += d.getFat();
+            calorieSum += (d.getCalorie() / 100) * d.getQuantity();
+            proteinSum +=  (d.getProtein() / 100) * d.getQuantity();
+            carbonhydrateSum += (d.getCarbonhydrate() / 100) * d.getQuantity();
+            fatSum += (d.getFat() / 100) * d.getQuantity();
         }
         DietGuestDto dietResponse = new DietGuestDto();
         dietResponse.setDiet(diets);
@@ -158,5 +158,15 @@ public class DietService {
     public List<MealFrequencyDto> getMealFrequency(Integer userId) {
         Guest guest = guestRepository.findByUserId(userId).orElseThrow(() -> new GuestNotFoundException("Vendég nem található: "+ userId));
         return dietRepository.getMealFrequency(guest.getId());
+    }
+
+    public List<CalendarEventDto> getAllDietByGuestId(int guestId){
+        List<CalendarEventDto> calendarEventDtos = new ArrayList<>();
+        List<Diet> diets = dietRepository.getAllDietByGuestId(guestId);
+        for(Diet d : diets){
+            CalendarEventDto dto = new CalendarEventDto("Étrend", d.getDate(), "#0000fff");
+            calendarEventDtos.add(dto);
+        }
+        return calendarEventDtos;
     }
 }
