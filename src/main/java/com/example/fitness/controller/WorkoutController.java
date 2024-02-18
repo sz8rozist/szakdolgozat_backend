@@ -72,4 +72,9 @@ public class WorkoutController {
     public List<CalendarEventDto> getAllWorkoutByGuest(@PathVariable int guestId){
         return workoutService.getAllWorkoutByGuestId(guestId);
     }
+
+    @GetMapping("/getAllTrainerGuestWorkout/{trainerId}")
+    public List<CalendarEventDto> getAllTrainerGuestWorkout(@PathVariable int trainerId){
+        return workoutService.getALlTrainerGuestWorkout(trainerId);
+    }
 }

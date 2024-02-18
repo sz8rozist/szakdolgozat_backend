@@ -71,4 +71,8 @@ public class DietController {
     public List<CalendarEventDto> getALlDietByGuest(@PathVariable int guestId){
         return dietService.getAllDietByGuestId(guestId);
     }
+    @GetMapping("/getAllTrainerGuestDiet/{trainerId}")
+    public List<CalendarEventDto> getAllTrainerGuestDiet(@PathVariable int trainerId){
+        return dietService.getAllTrainerGuestDiet(trainerId);
+    }
  }

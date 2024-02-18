@@ -13,4 +13,6 @@ public class CalendarEventDto {
     public String title;
     public LocalDate date;
     public String color;
+    public Boolean isTrainer;
+    public Boolean isDiet;
 }

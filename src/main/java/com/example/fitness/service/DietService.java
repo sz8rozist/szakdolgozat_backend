@@ -3,6 +3,7 @@ package com.example.fitness.service;
 import com.example.fitness.exception.DietNotFouncException;
 import com.example.fitness.exception.FoodNotFoundException;
 import com.example.fitness.exception.GuestNotFoundException;
+import com.example.fitness.exception.TrainerNotFoundException;
 import com.example.fitness.model.*;
 import com.example.fitness.model.dto.*;
 import com.example.fitness.model.request.DietRequest;
@@ -152,7 +153,7 @@ public class DietService {
         Double caloriesByDate = dietRepository.getCaloriesSumByDate(guest.getId());
         Double caloriesByWeek = dietRepository.getCaloriesSumForCurrentWeek(guest.getId());
         Double caloriesByMonth = dietRepository.getCaloriesSumForCurrentMonth(guest.getId());
-        return new CaloriesSumDto(caloriesByDate, caloriesByWeek, caloriesByMonth);
+        return new CaloriesSumDto(caloriesByDate != null ? caloriesByDate : 0, caloriesByWeek != null ? caloriesByWeek : 0, caloriesByMonth != null ? caloriesByMonth : 0);
     }
 
     public List<MealFrequencyDto> getMealFrequency(Integer userId) {
@@ -164,8 +165,21 @@ public class DietService {
         List<CalendarEventDto> calendarEventDtos = new ArrayList<>();
         List<Diet> diets = dietRepository.getAllDietByGuestId(guestId);
         for(Diet d : diets){
-            CalendarEventDto dto = new CalendarEventDto("Étrend", d.getDate(), "#0000fff");
+            CalendarEventDto dto = new CalendarEventDto("Étrend", d.getDate(), "#0000fff", false, true);
             calendarEventDtos.add(dto);
+        }
+        return calendarEventDtos;
+    }
+
+    public List<CalendarEventDto> getAllTrainerGuestDiet(int trainerId) {
+        Trainer trainer = trainerRepository.findById(trainerId).orElseThrow(() -> new TrainerNotFoundException("Nem található edző."));
+        List<CalendarEventDto> calendarEventDtos = new ArrayList<>();
+        for(Guest guest : trainer.getGuests()){
+            List<Diet> diets = dietRepository.getAllDietByGuestId(guest.getId());
+            for(Diet d: diets){
+                CalendarEventDto dto = new CalendarEventDto(guest.getFirst_name() + " " + guest.getLast_name() + " étrend", d.getDate(), "#0000fff", true, true);
+                calendarEventDtos.add(dto);
+            }
         }
         return calendarEventDtos;
     }

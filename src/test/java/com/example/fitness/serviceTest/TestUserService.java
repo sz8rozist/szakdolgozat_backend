@@ -5,10 +5,16 @@ import com.example.fitness.exception.FileIsEmptyException;
 import com.example.fitness.exception.InvalidUsernameOrPasswordException;
 import com.example.fitness.exception.UserExsistException;
 import com.example.fitness.exception.UsernameIsExsistsException;
+import com.example.fitness.model.Guest;
+import com.example.fitness.model.Message;
+import com.example.fitness.model.Trainer;
 import com.example.fitness.model.User;
 import com.example.fitness.model.dto.LoginDto;
+import com.example.fitness.model.dto.UserDto;
+import com.example.fitness.model.request.CheckPasswordRequest;
 import com.example.fitness.model.request.LoginRequest;
 import com.example.fitness.model.request.SignupRequest;
+import com.example.fitness.model.request.UpdateProfileRequest;
 import com.example.fitness.repository.GuestRepository;
 import com.example.fitness.repository.MessageRepository;
 import com.example.fitness.repository.TrainerRepository;
@@ -27,6 +33,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -238,5 +246,149 @@ public class TestUserService {
         assertThrows(FileNotFoundException.class, () -> {
             userService.deleteProfileImage(userId);
         });
+    }
+
+
+    @Test
+    public void testUpdateProfileGuest() {
+        // Arrange
+        int userId = 1;
+        User user = new User();
+        user.setId(userId);
+        Guest guest = new Guest();
+        user.setGuest(guest);
+
+        UpdateProfileRequest updateProfileRequest = new UpdateProfileRequest();
+        updateProfileRequest.setFirstName("John");
+        updateProfileRequest.setLastName("Doe");
+        updateProfileRequest.setEmail("john.doe@example.com");
+        updateProfileRequest.setAge(25);
+        updateProfileRequest.setWeight(70.5F);
+        updateProfileRequest.setHeight(175.0F);
+        updateProfileRequest.setGender("1");
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+
+        // Act
+        userService.update(updateProfileRequest, userId);
+
+        // Assert
+        assertEquals("John", guest.getFirst_name());
+        assertEquals("Doe", guest.getLast_name());
+        assertEquals("john.doe@example.com", guest.getEmail());
+        assertEquals(25, guest.getAge());
+        assertEquals(70.5, guest.getWeight());
+        assertEquals(175.0, guest.getHeight());
+        assertTrue(guest.isGender());
+    }
+
+    @Test
+    public void testUpdateProfileTrainer() {
+        // Arrange
+        int userId = 1;
+        User user = new User();
+        user.setId(userId);
+        Trainer trainer = new Trainer();
+        user.setTrainer(trainer);
+
+        UpdateProfileRequest updateProfileRequest = new UpdateProfileRequest();
+        updateProfileRequest.setFirstName("Jane");
+        updateProfileRequest.setLastName("Doe");
+        updateProfileRequest.setEmail("jane.doe@example.com");
+        updateProfileRequest.setType("Fitness");
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+
+        // Act
+        userService.update(updateProfileRequest, userId);
+
+        // Assert
+        assertEquals("Jane", trainer.getFirst_name());
+        assertEquals("Doe", trainer.getLast_name());
+        assertEquals("jane.doe@example.com", trainer.getEmail());
+        assertEquals("Fitness", trainer.getType());
+    }
+
+    @Test
+    public void testCheckPasswordNotMatch() {
+        // Arrange
+        int userId = 1;
+        User user = new User();
+        user.setId(userId);
+        user.setPassword("$2a$10$EXAMPLEHASH"); // Placeholder hash for testing
+
+        CheckPasswordRequest checkPasswordRequest = new CheckPasswordRequest();
+        checkPasswordRequest.setPassword("wrongPassword");
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+
+        // Act
+        boolean result = userService.checkPassword(userId, checkPasswordRequest);
+
+        // Assert
+        assertFalse(result);
+    }
+
+    @Test
+    public void testChangePassword() {
+        // Arrange
+        int userId = 1;
+        User user = new User();
+        user.setId(userId);
+        user.setPassword("$2a$10$EXAMPLEHASH"); // Placeholder hash for testing
+
+        CheckPasswordRequest checkPasswordRequest = new CheckPasswordRequest();
+        checkPasswordRequest.setPassword("newPassword");
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        when(passwordEncoder.encode("newPassword")).thenReturn("$2a$10$NEWEXAMPLEHASH"); // Placeholder hash for testing
+
+        // Act
+        userService.changePassword(checkPasswordRequest, userId);
+
+        // Assert
+        verify(userRepository, times(1)).save(user);
+        assertEquals("$2a$10$NEWEXAMPLEHASH", user.getPassword());
+    }
+
+    @Test
+    public void testGetAllUsers() {
+        // Arrange
+        int userId = 1;
+        User user = new User();
+        user.setId(userId);
+        user.setUsername("john_doe");
+        user.setProfilePictureName("profile.jpg");
+
+        Trainer trainer = new Trainer();
+        trainer.setFirst_name("TrainerFirstName");
+        trainer.setLast_name("TrainerLastName");
+        user.setTrainer(trainer);
+
+        Guest guest = new Guest();
+        guest.setFirst_name("GuestFirstName");
+        guest.setLast_name("GuestLastName");
+        user.setGuest(guest);
+
+        List<User> userList = Collections.singletonList(user);
+        when(userRepository.findAllExceptUser(userId)).thenReturn(userList);
+
+        // Mock last message for testing purposes
+        Message lastMessage = new Message();
+        lastMessage.setMessage("Last message");
+        when(messageRepository.getLastMessage(userId, user.getId())).thenReturn(lastMessage);
+
+        // Act
+        List<UserDto> result = userService.getAllUser(userId);
+
+        // Assert
+        assertEquals(1, result.size());
+        UserDto userDto = result.get(0);
+        assertEquals(userId, userDto.getId());
+        assertEquals("john_doe", userDto.getUsername());
+        assertEquals("profile.jpg", userDto.getProfilePictureName());
+        assertEquals("GuestFirstName", userDto.getFirstName());
+        assertEquals("GuestLastName", userDto.getLastName());
+        assertEquals("Last message", userDto.getLastMessage());
     }
 }
