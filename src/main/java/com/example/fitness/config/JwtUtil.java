@@ -48,7 +48,7 @@ public class JwtUtil {
                 .compact();
     }
 
-    private Claims parseJwtClaims(String token) {
+    Claims parseJwtClaims(String token) {
         return jwtParser.parseClaimsJws(token).getBody();
     }
 

@@ -31,6 +31,9 @@ public class User{
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Trainer trainer;
 
+    @Column(name = "online", columnDefinition = "TINYINT DEFAULT 0")
+    private boolean online;
+
     public Optional<Guest> getGuest() {
         return Optional.ofNullable(guest);
     }

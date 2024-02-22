@@ -8,10 +8,12 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserDto {
-    private Integer id;
+    private int id;
     private String username;
     private String profilePictureName;
     private String firstName;
     private String lastName;
     private String lastMessage;
+    private String lastMessageId;
+    private boolean isOnline;
 }

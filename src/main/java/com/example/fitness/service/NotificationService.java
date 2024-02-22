@@ -29,11 +29,13 @@ public class NotificationService {
     public List<NotificationDto> getAllNotification(Integer userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("Nem található felhasználó!"));
         List<Role> roles = user.getRoles();
-
+        for(Role role : roles){
+            System.out.println(role.getRole().name());
+        }
         if (roles.stream().anyMatch(role -> role.getRole() == RoleEnumType.GUEST)) {
-            return notificationRepository.findAllGuestNotification(user.getGuest().orElseThrow().getId());
+            return notificationRepository.findAllGuestNotification(user.getGuest().orElseThrow(() -> new NotificationNotFoundException("Nem található értesítés")).getId());
         } else if (roles.stream().anyMatch(role -> role.getRole() == RoleEnumType.TRAINER)) {
-            return notificationRepository.findAllTrainerNotifications(user.getTrainer().orElseThrow().getId());
+            return notificationRepository.findAllTrainerNotifications(user.getTrainer().orElseThrow(() -> new NotificationNotFoundException("Nem található értesítés")).getId());
         } else {
             return new ArrayList<>();
         }

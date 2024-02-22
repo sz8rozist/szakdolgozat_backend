@@ -1,10 +1,7 @@
 package com.example.fitness.service;
 
 import com.example.fitness.config.JwtUtil;
-import com.example.fitness.exception.FileIsEmptyException;
-import com.example.fitness.exception.InvalidUsernameOrPasswordException;
-import com.example.fitness.exception.UserExsistException;
-import com.example.fitness.exception.UsernameIsExsistsException;
+import com.example.fitness.exception.*;
 import com.example.fitness.model.*;
 import com.example.fitness.model.dto.UserDto;
 import com.example.fitness.model.request.CheckPasswordRequest;
@@ -225,8 +222,23 @@ public class UserService {
             }
             Message message = messageRepository.getLastMessage(userId, u.getId());
             userDTO.setLastMessage(message != null ? message.getMessage() : "");
+            userDTO.setLastMessageId(message != null ? String.valueOf(message.getId()) : "");
+            userDTO.setOnline(u.isOnline());
             userDTOs.add(userDTO);
         }
         return userDTOs;
+    }
+
+    public void setOnline(int userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("Nem található felhasználó!"));
+        user.setOnline(true);
+        userRepository.save(user);
+    }
+
+    public void removeOnline(int userId){
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("Nem található felhasználó!"));
+        user.setOnline(false);
+        System.out.println(user.isOnline());
+        userRepository.save(user);
     }
 }

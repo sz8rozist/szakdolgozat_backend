@@ -25,5 +25,4 @@ public class Role {
     @JsonIgnore
     @JoinColumn(name = "user_id")
     private User user;
-
 }

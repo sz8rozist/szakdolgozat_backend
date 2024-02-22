@@ -78,4 +78,14 @@ public class UserController {
         return userService.getAllUser(userId);
     }
 
+    @GetMapping("/setOnline/{userId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void setOnline(@PathVariable int userId){
+        userService.setOnline(userId);
+    }
+    @GetMapping("/removeOnline/{userId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void removeOnline(@PathVariable int userId){
+        userService.removeOnline(userId);
+    }
 }
