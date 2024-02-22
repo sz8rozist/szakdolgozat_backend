@@ -15,4 +15,5 @@ public class CalendarEventDto {
     public String color;
     public Boolean isTrainer;
     public Boolean isDiet;
+    public int guestId;
 }

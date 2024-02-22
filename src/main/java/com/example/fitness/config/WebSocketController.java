@@ -10,6 +10,8 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
+import java.time.LocalDate;
+
 @Controller
 public class WebSocketController {
 
@@ -71,6 +73,7 @@ public class WebSocketController {
         notification.setGuest(guest);
         notification.setTrainer(trainer);
         notification.setType(NotificationType.DIET);
+        notification.setDate(LocalDate.now());
         diet.setEated(true);
         dietRepository.save(diet);
         notificationRepository.save(notification);
@@ -104,6 +107,7 @@ public class WebSocketController {
         notification.setGuest(guest);
         notification.setTrainer(trainer);
         notification.setType(NotificationType.EXERCISE);
+        notification.setDate(LocalDate.now());
         workout.setDone(true);
         workoutRepository.save(workout);
         notificationRepository.save(notification);
@@ -121,6 +125,7 @@ public class WebSocketController {
         notification1.setGuest(guest);
         notification1.setTrainer(trainer);
         notification1.setType(NotificationType.FEEDBACK);
+        notification1.setDate(LocalDate.now());
         notificationRepository.save(notification1);
         NotificationDto notificationDto = getNotificationDto(notification1, guest, trainer);
         messagingTemplate.convertAndSend("/queue/guestFeedback/" + notification.getGuest().getId(), notificationDto);

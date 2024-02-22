@@ -77,4 +77,10 @@ public class WorkoutController {
     public List<CalendarEventDto> getAllTrainerGuestWorkout(@PathVariable int trainerId){
         return workoutService.getALlTrainerGuestWorkout(trainerId);
     }
+
+    @GetMapping("/setDone/{workoutId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void setDone(@PathVariable int workoutId){
+        workoutService.setDone(workoutId);
+    }
 }

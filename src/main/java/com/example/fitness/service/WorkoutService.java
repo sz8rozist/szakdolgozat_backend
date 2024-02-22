@@ -175,7 +175,7 @@ public class WorkoutService {
         List<CalendarEventDto> calendarEventDtos = new ArrayList<>();
         List<Workout> workout = workoutRepository.getAllWorkoutByGuest(guestId);
         for(Workout w : workout){
-            CalendarEventDto dto = new CalendarEventDto("Edzés", w.getDate(), "#65b741", false, false);
+            CalendarEventDto dto = new CalendarEventDto("Edzés", w.getDate(), "#65b741", false, false, guestId);
             calendarEventDtos.add(dto);
         }
         return calendarEventDtos;
@@ -187,10 +187,16 @@ public class WorkoutService {
         for(Guest guest : trainer.getGuests()){
             List<Workout> workouts = workoutRepository.getAllWorkoutByGuest(guest.getId());
             for(Workout w: workouts){
-                CalendarEventDto dto = new CalendarEventDto(guest.getFirst_name() + " " + guest.getLast_name() + " edzés", w.getDate(), "#65b741", true, false);
+                CalendarEventDto dto = new CalendarEventDto(guest.getFirst_name() + " " + guest.getLast_name() + " edzés", w.getDate(), "#65b741", true, false, guest.getId());
                 calendarEventDtos.add(dto);
             }
         }
         return calendarEventDtos;
+    }
+
+    public void setDone(int workoutId) {
+        Workout workout = workoutRepository.findById(workoutId).orElseThrow(() -> new WorkoutNotFoundException("Nem található edzés"));
+        workout.setDone(true);
+        workoutRepository.save(workout);
     }
 }

@@ -75,4 +75,10 @@ public class DietController {
     public List<CalendarEventDto> getAllTrainerGuestDiet(@PathVariable int trainerId){
         return dietService.getAllTrainerGuestDiet(trainerId);
     }
+
+    @GetMapping("/setEated/{dietId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void setEated(@PathVariable int dietId){
+        dietService.setEated(dietId);
+    }
  }

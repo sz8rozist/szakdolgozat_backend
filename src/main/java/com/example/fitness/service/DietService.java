@@ -165,7 +165,7 @@ public class DietService {
         List<CalendarEventDto> calendarEventDtos = new ArrayList<>();
         List<Diet> diets = dietRepository.getAllDietByGuestId(guestId);
         for(Diet d : diets){
-            CalendarEventDto dto = new CalendarEventDto("Étrend", d.getDate(), "#0000fff", false, true);
+            CalendarEventDto dto = new CalendarEventDto("Étrend", d.getDate(), "#0000fff", false, true, guestId);
             calendarEventDtos.add(dto);
         }
         return calendarEventDtos;
@@ -177,10 +177,16 @@ public class DietService {
         for(Guest guest : trainer.getGuests()){
             List<Diet> diets = dietRepository.getAllDietByGuestId(guest.getId());
             for(Diet d: diets){
-                CalendarEventDto dto = new CalendarEventDto(guest.getFirst_name() + " " + guest.getLast_name() + " étrend", d.getDate(), "#0000fff", true, true);
+                CalendarEventDto dto = new CalendarEventDto(guest.getFirst_name() + " " + guest.getLast_name() + " étrend", d.getDate(), "#0000fff", true, true, guest.getId());
                 calendarEventDtos.add(dto);
             }
         }
         return calendarEventDtos;
+    }
+
+    public void setEated(int dietId) {
+        Diet diet = dietRepository.findById(dietId).orElseThrow(() -> new DietNotFouncException("Nem található étrend"));
+        diet.setEated(true);
+        dietRepository.save(diet);
     }
 }
