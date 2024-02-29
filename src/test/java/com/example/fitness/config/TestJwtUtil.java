@@ -59,9 +59,7 @@ public class TestJwtUtil {
     @Test
     void validateClaims_Valid() {
         Claims claims = Jwts.claims().setExpiration(new Date(System.currentTimeMillis() + 1000));
-
         boolean result = jwtUtil.validateClaims(claims);
-
         assertTrue(result);
     }
 }

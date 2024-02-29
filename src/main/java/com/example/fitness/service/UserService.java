@@ -1,6 +1,7 @@
 package com.example.fitness.service;
 
 import com.example.fitness.config.JwtUtil;
+import com.example.fitness.config.SecurityContextUtil;
 import com.example.fitness.exception.*;
 import com.example.fitness.model.*;
 import com.example.fitness.model.dto.UserDto;
@@ -19,7 +20,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -56,7 +59,8 @@ public class UserService {
 
     public LoginDto authenticate(LoginRequest authRequest) throws InvalidUsernameOrPasswordException{
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+            SecurityContextUtil.setAuthentication(authentication);
             String token = jwtUtil.createToken(authRequest.getUsername());
             LoginDto response = new LoginDto();
             response.setToken(token);
