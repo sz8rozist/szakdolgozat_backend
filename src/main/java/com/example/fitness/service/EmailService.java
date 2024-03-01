@@ -46,7 +46,7 @@ public class EmailService {
     @Value(value = "${spring.mail.username}")
     private String from;
     private final Set<String> sentEmails = new HashSet<>();
-    @Scheduled(cron = "0 0 6 * * *")
+    @Scheduled(cron = "0 0 4 * * *")
     public void sendEmailMorning() throws MessagingException, IOException {
         System.out.println("sendEmailMorning metódus elindult: " + LocalDateTime.now());
         if (!sentEmails.contains("morning")) {
@@ -81,7 +81,7 @@ public class EmailService {
                     messageBuilder.append("<p>Étrend: </p>");
                     messageBuilder.append("<table style='width:100%; border-collapse: collapse;'><tr><th>Étel</th><th>Típusa</th></tr>");
                     for(Diet diet : diets){
-                        messageBuilder.append("<tr><td>").append(diet.getFood().getName()).append("</td><td>").append(diet.getType().name()).append("</td></tr>");
+                        messageBuilder.append("<tr><td>").append(diet.getFood().getName()).append("</td><td>").append(translateFoodName(diet.getType().name())).append("</td></tr>");
                     }
                     messageBuilder.append("</table>");
                 }else{
@@ -108,5 +108,15 @@ public class EmailService {
                 sentEmails.add("morning");
             }
         }
+    }
+
+    private String translateFoodName(String type){
+        return switch (type) {
+            case "LUNCH" -> "Ebéd";
+            case "BREAKFAST" -> "Reggeli";
+            case "DINNER" -> "Vacsora";
+            case "SNACK" -> "Snack";
+            default -> "";
+        };
     }
 }
