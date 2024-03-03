@@ -81,7 +81,7 @@ public class WebSocketController {
         messagingTemplate.convertAndSend("/queue/trainerNotification/" + trainer.getUser().getId(), notificationDto);
     }
 
-    private static NotificationDto getNotificationDto(Notification notification, Guest guest, Trainer trainer) {
+    public static NotificationDto getNotificationDto(Notification notification, Guest guest, Trainer trainer) {
         NotificationDto notificationDto = new NotificationDto();
         notificationDto.setNotificationId(notification.getId());
         notificationDto.setDate(notification.getDate());
