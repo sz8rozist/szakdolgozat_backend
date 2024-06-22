@@ -30,7 +30,7 @@ public class DietRecommendationController {
         return dietRecommendationService.save(dietRecommedation, guestId, trainerUserId);
     }
     @GetMapping("/{guestUserId}/{date}")
-    @PreAuthorize("hasAuthority('TRAINER')")
+    @PreAuthorize("hasAnyAuthority('GUEST', 'TRAINER')")
     public DietRecommedation getRecommendationByDateAndGuest(@PathVariable int guestUserId, @PathVariable LocalDate date) throws DietRecommendationNotFoundException {
         return dietRecommendationService.getRecommendationByDateAndGuest(guestUserId, date);
     }
