@@ -4,7 +4,6 @@ import com.example.fitness.config.JwtUtil;
 import com.example.fitness.config.SecurityContextUtil;
 import com.example.fitness.exception.*;
 import com.example.fitness.model.*;
-import com.example.fitness.model.dto.AdminUsersDTO;
 import com.example.fitness.model.dto.UserDto;
 import com.example.fitness.model.request.CheckPasswordRequest;
 import com.example.fitness.model.request.LoginRequest;
@@ -245,12 +244,5 @@ public class UserService {
         user.setOnline(false);
         System.out.println(user.isOnline());
         userRepository.save(user);
-    }
-
-    public AdminUsersDTO getAllUserForAdmin(){
-        AdminUsersDTO adminUsersDTOs = new AdminUsersDTO();
-        adminUsersDTOs.setTrainers(trainerRepository.findAll());
-        adminUsersDTOs.setGuests(guestRepository.findAll());
-        return adminUsersDTOs;
     }
 }

@@ -48,7 +48,7 @@ public class SecurityConfig {
                     .cors(Customizer.withDefaults())
                    // .authorizeHttpRequests(auth -> auth.requestMatchers("/user/**", "/trainer/**", "/food/**","/exercise/**", "/notification/**", "/diet/**", "/workout/**", "/ws/**", "/message/**", "/guest/**",  "/dietRecommendation/**").permitAll().requestMatchers("/home/**").hasAuthority("GUEST").anyRequest().authenticated())
                     .authorizeHttpRequests(auth ->
-                            auth.requestMatchers("/user/login", "/user/register", "/ws/**", "/admin/**")
+                            auth.requestMatchers("/user/login", "/user/register", "/ws/**")
                             .permitAll()
                                     .requestMatchers("/user/**").hasAnyAuthority("GUEST", "TRAINER")
                                     //.requestMatchers("/home/**").hasAuthority("GUEST")
